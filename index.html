@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Sumit Kumar</title>
+        <meta charset="UTF-8">
+        <meta name="description" content="Personal Website">
+        <meta name="author" content="Sumit Kumar">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=0">
+        <link rel="stylesheet" href="https://unpkg.com/@sakun/system.css" />
+        <link rel="stylesheet" href="https://unpkg.com/xterm@4.19.0/css/xterm.css" />
+        <link rel="stylesheet" href="style.css" />
+
+        <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.js"></script>
+        <script src="https://unpkg.com/xterm@4.19.0/lib/xterm.js"></script>
+    </head>
+    <body>
+        <ul role="menu-bar">
+            <li role="menu-item" tabindex="0" aria-haspopup="true">
+                &lt;&gt;
+                <ul role="menu">
+                    <li role="menu-item"><a href="#terminal">Terminal</a></li>
+                    <li role="menu-item"><a href="https://github.com/SumitKumar-17/SumitKumar-17.github.io">View Source</a></li>
+                </ul>
+            </li>
+            <li class="hide" role="menu-item" tabindex="0" aria-haspopup="true">
+                About
+                <ul role="menu">
+                    <li role="menu-item" class="divider"><a href="#me">Me</a></li>
+                    <li role="menu-item"><a href="./assets/resume.pdf" target="_blank">Resume</a></li>
+                    <!-- <li role="menu-item"><a href="https://maaslalani.com/blog" target="_blank">Blog</a></li> -->
+                </ul>
+            </li>
+            <li role="menu-item" tabindex="0" aria-haspopup="true">
+                Contact
+                <ul role="menu">
+                    <li role="menu-item"><a href="mailto:sumitkanpur2005@gmail.com" target="_blank">Email</a></li>
+                    <li role="menu-item"><a href="https://twitter.com/SumitK371" target="_blank">Twitter</a></li>
+                    <li role="menu-item"><a href="https://github.com/SumitKumar-17" target="_blank">GitHub</a></li>
+                </ul>
+            </li>
+            <!-- <li role="menu-item" tabindex="0" aria-haspopup="true">
+                Projects
+                <ul role="menu">
+                    <li role="menu-item"><a href="https://github.com/maaslalani/slides" target="_blank">Slides</a></li>
+                    <li role="menu-item"><a href="https://github.com/maaslalani/gambit" target="_blank">Gambit</a></li>
+                    <li role="menu-item"><a href="https://github.com/maaslalani/draw" target="_blank">Draw</a></li>
+                    <li role="menu-item"><a href="https://github.com/maaslalani/confetty" target="_blank">Confetty</a></li>
+                    <li role="menu-item"><a href="https://github.com/maaslalani/twttr" target="_blank">Twttr</a></li>
+                    <li role="menu-item" class="divider"></li>
+                    <li role="menu-item"><a href="https://size.link" target="_blank">Size Link</a></li>
+                    <li role="menu-item"><a href="https://projectfolded.com" target="_blank">Project Folded</a></li>
+                    <li role="menu-item" class="divider"></li>
+                    <li role="menu-item"><a href="https://chrome.google.com/webstore/detail/just-focus/gefaddaengbodpiobpbgblajdboalmgc" target="_blank">Just Focus</a></li>
+                    <li role="menu-item"><a href="https://www.producthunt.com/products/remove-vanity-metrics" target="_blank">Remove Vanity Metrics</a></li>
+                    <li role="menu-item"><a href="https://www.producthunt.com/products/founder-rewind" target="_blank">Founder Rewind</a></li>
+                    <li role="menu-item"><a href="https://www.producthunt.com/products/mafialist" target="_blank">Mafia List</a></li>
+                    <li role="menu-item"><a href="https://www.producthunt.com/products/offset-list" target="_blank">Offset List</a></li>
+                    <li role="menu-item" class="divider"></li>
+                    <li role="menu-item"><a href="https://usehawkeye.com" target="_blank">Hawkeye User Testing</a></li>
+                    <li role="menu-item"><a href="https://usehawkeye.com/access" target="_blank">Hawkeye Access</a></li>
+                </ul>
+            </li> -->
+            <!-- <li role="menu-item" tabindex="0" aria-haspopup="true">
+                Work
+                <ul role="menu">
+                    <li role="menu-item"><a href="https://charm.sh" target="_blank">Charm</a></li>
+                    <li role="menu-item" class="divider"></li>
+                    <li role="menu-item"><a href="https://locket.camera" target="_blank">Locket Camera</a></li>
+                    <li role="menu-item"><a href="https://shopify.com" target="_blank">Shopify</a></li>
+                    <li role="menu-item"><a href="https://usehawkeye.com" target="_blank">Hawkeye</a></li>
+                    <li role="menu-item"><a href="https://lendingloop.ca" target="_blank">Lending Loop</a></li>
+                </ul>
+            </li> -->
+        </ul>
+
+        <div id="terminal" class="window moveable">
+            <div class="title-bar">
+                <button aria-label="Close" class="close"></button>
+                <h1 class="title">Terminal</h1>
+                <button aria-label="Resize" disabled class="hidden"></button>
+            </div>
+            <div class="separator"></div>
+            <div class="modeless-dialog">
+            </div>
+        </div>
+
+        <div id="model" class="window moveable">
+            <div class="title-bar">
+                <button aria-label="Close" class="close"></button>
+                <h1 class="title">Astronaut</h1>
+                <button aria-label="Resize" disabled class="hidden"></button>
+            </div>
+            <div class="separator"></div>
+
+            <div class="modeless-dialog">
+                <model-viewer
+                        style="height:100%"
+                        alt="A 3D model of an astronaut"
+                        src="./assets/Astronaut.glb"
+                        interaction-prompt="none"
+                        exposure="2"
+                        auto-rotate
+                        preload
+                        disable-zoom
+                        disable-pan
+                        camera-controls>
+                    <div slot="progress-bar"></div>
+                </model-viewer>
+            </div>
+        </div>
+
+        <!-- <div id="projects" class="window moveable">
+            <div class="title-bar">
+                <button aria-label="Close" class="close"></button>
+                <h1 class="title">Projects</h1>
+                <button aria-label="Resize" disabled class="hidden"></button>
+            </div>
+            <div class="separator"></div>
+
+            <div class="window-pane">
+                <h3>Command Line Tools</h3>
+                <ul>
+                    <li><a href="https://github.com/maaslalani/slides" target="_blank">Slides</a><description> Presentations in your terminal</description></li>
+                    <li><a href="https://github.com/maaslalani/gambit" target="_blank">Gambit</a><description> Play chess in your terminal</description></li>
+                    <li><a href="https://github.com/maaslalani/draw" target="_blank">Draw</a><description> Draw in your terminal</description></li>
+                    <li><a href="https://github.com/maaslalani/confetty" target="_blank">Confetty</a><description> Confetti in your TTY</description></li>
+                    <li><a href="https://github.com/maaslalani/twttr" target="_blank">Twttr</a><description> Browse twitter in your terminal</description></li>
+                </ul>
+
+                <h3>Augmented Reality</h3>
+                <ul>
+                    <li><a href="https://size.link" target="_blank">Size Link</a><description> Visualize dimensions in AR</description></li>
+                </ul>
+
+                <h3>Products</h3>
+                <ul>
+                    <li><a href="https://projectfolded.com" target="_blank">Project Folded</a><description> Send origami to loved ones</description></li>
+                    <li><a href="https://chrome.google.com/webstore/detail/just-focus/gefaddaengbodpiobpbgblajdboalmgc" target="_blank">Just Focus</a><description> Block distracting websites</description></li>
+                    <li><a href="https://www.producthunt.com/products/remove-vanity-metrics" target="_blank">Remove Vanity Metrics</a><description> Hide Twitter metrics</description></li>
+                    <li><a href="https://www.producthunt.com/products/founder-rewind" target="_blank">Founder Rewind</a><description> Old interviews with founders</description></li>
+                    <li><a href="https://www.producthunt.com/products/mafialist" target="_blank">Mafia List</a><description> Startups from X-company employees</description></li>
+                    <li><a href="https://www.producthunt.com/products/offset-list" target="_blank">Offset List</a><description> Carbon offsetting companies</description></li>
+                </ul>
+
+                <h3>Hawkeye</h3>
+                <ul>
+                    <li><a href="https://usehawkeye.com" target="_blank">Testing</a><description> Learn where people look in your apps</description></li>
+                    <li><a href="https://usehawkeye.com/access" target="_blank">Access</a><description> Use your iPhone with only your eyes</description></li>
+                </ul>
+            </div>
+        </div> -->
+
+        <div id="about" class="window moveable">
+            <div class="title-bar">
+                <button aria-label="Close" class="close"></button>
+                <h1 class="title">Sumit Kumar</h1>
+                <button aria-label="Resize" disabled class="hidden"></button>
+            </div>
+            <div class="separator"></div>
+
+            <div class="window-pane">
+                <p>Hi there, I'm Sumit Kumar! I build software for fun and for a living. I love open-source software and command-line interfaces.</p>
+                <p>Reach out at <a href="mailto:sumitkanpur2005@gmail.com">sumitkanpur2005@gmail.com</a> or <a href="https://twitter.com/SumitK371">@SumitK371</a>.</p>
+            </div>
+        </div>
+
+        <script src="script.js"></script>
+        <script src="terminal.js"></script>
+    </body>
+</html>

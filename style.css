@@ -1,0 +1,86 @@
+body {
+	margin: 0;
+	padding: 0;
+}
+
+.moveable {
+	margin: 0;
+
+	position: absolute;
+}
+
+a {
+	color: #000;
+	text-decoration: none;
+}
+
+ul {
+	padding-left: 1em;
+}
+
+li {
+	line-height: 1.5em;
+}
+
+a:hover {
+	border-bottom: 1px dotted #000;
+}
+
+description {
+	color: #BBB;
+	font-size: 0.9em;
+}
+
+#projects {
+	height: 25rem;
+	width: 32.5rem;
+
+	padding-bottom: 5rem;
+}
+
+#about {
+	width: 30rem;
+}
+
+#model {
+	height: 20rem;
+}
+
+#terminal {
+	width: 35rem;
+	height: 20rem;
+}
+
+@media screen and (max-width: 600px) {
+	p, ul {
+		font-size: 14px;
+	}
+
+	h1, h2, h3, h4, h5, h6 {
+		font-size: 16px;
+	}
+
+	#projects {
+		height: 15rem;
+		width: 20rem;
+
+		padding-bottom: 5rem;
+	}
+
+	#about {
+		width: 10rem;
+	}
+
+	#model {
+		height: 20rem;
+	}
+
+	#terminal {
+		height: 15rem;
+		width: 22.5rem;
+	}
+
+	.hide {
+		display: none;
+	}
+}
