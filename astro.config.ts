@@ -20,6 +20,11 @@ import rehypeExternalLinks from 'rehype-external-links'
 const redirectList = [
   {
     id: 1,
+    source: '/gsoc-apply/',
+    destination: '/posts/gsoc-apply/',
+    permanent: true,
+  },{
+    id: 2,
     source: '/keystonedb/',
     destination: '/posts/keystonedb/',
     permanent: true,
