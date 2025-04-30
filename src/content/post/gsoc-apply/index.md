@@ -3,7 +3,6 @@ title: "GSOC Application"
 description: "My GSOC Applications"
 publishDate: "28 April 2025"
 draft: false
-
 tags: ["gsoc"]
 ---
 
