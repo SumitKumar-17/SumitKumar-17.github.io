@@ -1,6 +1,6 @@
 ---
 title: "GSOC Application"
-description: "My GSOC Applications"
+description: "My GSOC Applications rejected from Postgres"
 publishDate: "28 April 2025"
 draft: false
 tags: ["gsoc"]
