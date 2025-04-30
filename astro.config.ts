@@ -20,8 +20,8 @@ import rehypeExternalLinks from 'rehype-external-links'
 const redirectList = [
   {
     id: 1,
-    source: '/felvin-intern/',
-    destination: '/posts/felvin-intern/',
+    source: '/keystonedb/',
+    destination: '/posts/keystonedb/',
     permanent: true,
   },
 ]
