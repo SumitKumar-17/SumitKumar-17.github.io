@@ -64,7 +64,7 @@ SELECT * FROM users;
 
 Here's a screen shot.
 
-<img width="100%" src="/keystondb/keystoneDB_Demo.png"/>
+<img width="100%" src="/keystonedb/keystoneDB_Demo.png"/>
 
 ## Final Thoughts
 
