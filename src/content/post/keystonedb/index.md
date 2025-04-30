@@ -6,8 +6,6 @@ draft: false
 tags: ["database", "compilers", "tech","grpc","rocksdb"]
 ---
 
-# KeystoneDB
-
 I made this custom small database project as part of my Database Management Laboratory final assignment. When I first looked at the list of recommended full-stack projects, I was honestly bored. They all felt too templated. So instead of picking one of those ideas or copying a senior’s project, I decided to do something from scratch—something that sounded cool.
 
 > “Let’s build a database engine.”
