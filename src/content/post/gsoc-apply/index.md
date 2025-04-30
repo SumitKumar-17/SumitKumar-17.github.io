@@ -7,16 +7,16 @@ draft: false
 tags: ["gsoc"]
 ---
 
-So for the year 2025 I had applied for threee GSOC projects
- 1) Postgres 
- 2)llvm
- 3)libssh
- 
- but a few days ago I got to knew that the project for Postgres which I had applied to has beend removed from the official Postgres projects.
- Why the hell was it removed 
- It would have felt somewhere less bad if I had not been selected for it.
- But before May 8( the contributors annoucncement date) it is rmeoved.
+So for the year 2025, I had applied for three GSoC projects:  
+1) Postgres  
+2) LLVM  
+3) libssh  
 
- :( shhh
+But a few days ago, I got to know that the project I had applied to under Postgres has been removed from the official Postgres projects list.  
+Why the hell was it removed?  
+It would've felt somewhere less bad if I just wasn't selected for it.  
+But no — it's removed even before May 8 (the contributors announcement date).  
 
- Let see if I can get selected in the other two ,or I am getting rejection again..
+:( shhh
+
+Let's see if I can get selected in the other two, or if I'm getting rejected again...
