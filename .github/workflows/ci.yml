@@ -1,14 +1,21 @@
 name: Deploy to GitHub Pages
 
 on:
+  # Trigger the workflow every time you push to the `master` branch
   push:
     branches: [master]
+  # Allows you to run this workflow manually from the Actions tab on GitHub.
   workflow_dispatch:
 
+# Allow this job to clone the repo and create a page deployment
 permissions:
   contents: read
   pages: write
   id-token: write
+
+# Set correct environment variables
+env:
+  WEBMENTION_API_KEY: ${{ secrets.WEBMENTION_API_KEY }}
 
 jobs:
   build:
@@ -17,29 +24,35 @@ jobs:
       - name: Checkout your repository using git
         uses: actions/checkout@v4
 
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
       - name: Install, build, and upload your site
         uses: withastro/action@v2
-        env:
-          WEBMENTION_API_KEY: ${{ secrets.WEBMENTION_API_KEY }}
         with:
-          path: .
-          node-version: 18
-          package-manager: pnpm@latest
+          path: . # The root location of your Astro project inside the repository
+          node-version: 18 # The specific version of Node that should be used to build your site
+          package-manager: pnpm@latest # The Node package manager that should be used
 
       - name: Add .nojekyll to prevent Jekyll processing
         run: touch dist/.nojekyll
-
+        
+      - name: Debug - List build files
+        run: |
+          echo "Checking build output files:"
+          ls -la dist/
+          
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist
 
   deploy:
-    needs: build
-    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
