@@ -33,6 +33,8 @@ jobs:
           path: . # The root location of your Astro project inside the repository
           node-version: 18 # The specific version of Node that should be used to build your site
           package-manager: pnpm@latest # The Node package manager that should be used
+          # Important: disable the automatic artifact upload from withastro/action
+          upload-artifact: false
 
       - name: Add .nojekyll to prevent Jekyll processing
         run: touch dist/.nojekyll
@@ -42,9 +44,10 @@ jobs:
           echo "Checking build output files:"
           ls -la dist/
           
-      - name: Upload artifact
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
+          name: github-pages
           path: ./dist
 
   deploy:
