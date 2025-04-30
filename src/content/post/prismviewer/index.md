@@ -1,9 +1,9 @@
 ---
 title: "PrismViewer"
 description: "A simple Prisma schema viewer and database editor for quick DB tweaks"
-publishDate: "30 April 2025"
+publishDate: "1 January 2025"
 draft: false
-tags: ["prisma", "fullstack", "devtools", "sideprojects"]
+tags: ["prisma", "devtools", "sideprojects"]
 ---
 
 # PrismViewer
