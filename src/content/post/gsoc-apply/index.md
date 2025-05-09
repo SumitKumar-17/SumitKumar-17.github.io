@@ -19,3 +19,6 @@ But no — it's removed even before May 8 (the contributors announcement date).
 :( shhh
 
 Let's see if I can get selected in the other two, or if I'm getting rejected again...
+
+Update(9 May 2025): Rejected in all Proposals. (︶︹︺)
+
