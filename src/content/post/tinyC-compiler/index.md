@@ -1,6 +1,6 @@
 ---
-title: "DBMS Mid Term Project"
-description: "My work of making the DBMS Mid Term Project"
+title: "TinyC Compiler Making"
+description: "Making your own compiler from scratch"
 publishDate: "15 November 2024"
 draft: false
 tags: ["compiler", "lexer", "parser","intermediate-representation","IR",]
