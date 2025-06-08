@@ -66,7 +66,6 @@ This will create a `tree.md` file with the structure of the `myproject` director
                 └── file3.txt
 ```
 
-
 ## Excluding Stuff
 
 If you want to skip certain types of files or folders, just use the `--exclude` flag:
