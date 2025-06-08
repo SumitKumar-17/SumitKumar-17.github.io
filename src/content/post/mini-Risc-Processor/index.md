@@ -12,8 +12,6 @@ tags: ["processor","RISC"]
 As part of the Computer Organization Laboratory course (CS39001), we implemented a Mini RISC Processor from scratch using Verilog HDL,even tested on Arty S7-100 FPGA board.
 The processor supports a basic RISC-style instruction set with essential components like an ALU, register file, instruction memory, and data memory.
 
----
-
 ## Implementation Details
 
 We designed the datapath and control path following a modular approach, allowing clear separation between instruction decode, execution, memory access, and write-back stages. Our processor handles arithmetic operations, memory load/store, and control flow instructions like branches and jumps.
@@ -23,8 +21,6 @@ The project involved:
 - Simulating and debugging using Xilinx Vivado
 - Integrating modules into a pipelined architecture
 - Handling hazard detection and adding basic forwarding to improve execution
-
----
 
 ## My Experience
 
