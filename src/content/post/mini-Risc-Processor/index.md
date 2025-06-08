@@ -1,6 +1,6 @@
 ---
 title: "Mini RISC Processor"
-description: "Making your own Processor"
+description: "Making your own Processor module using Verilog, Testing it on a FPGA"
 publishDate: "15 November 2024"
 draft: false
 tags: ["processor","RISC"]
