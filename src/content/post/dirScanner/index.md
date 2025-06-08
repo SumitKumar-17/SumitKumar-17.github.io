@@ -52,6 +52,21 @@ dirscanner ./myproject tree.md
 
 This will create a `tree.md` file with the structure of the `myproject` directory.
 
+## Example Output
+```
+├── .dirignore
+├── file2.txt
+└── sumit
+    ├── file1.txt
+    └── sumit-1
+        ├── kafka.txt
+        └── sumit-2
+            ├── file.txt
+            └── sumit-3
+                └── file3.txt
+```
+
+
 ## Excluding Stuff
 
 If you want to skip certain types of files or folders, just use the `--exclude` flag:
