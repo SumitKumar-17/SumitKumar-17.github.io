@@ -22,6 +22,17 @@ The **backend** uses Node.js and Express.js with MongoDB as the database. It han
 On the frontend, React components manage the UI and Redux handles global states like user info and courses. Tailwind made styling fast without writing lots of CSS.
 
 The backend exposes REST APIs using Express and connects to MongoDB for storing data. We structured routes for users, courses, and assignments with proper authentication and role-based access control.
+## Demo
+
+Here's a screen shot.
+
+<img width="100%" src="/ocms/frontend.png"/>
+
+<img width="100%" src="/ocms/frontend-2.png"/>
+
+<img width="100%" src="/ocms/frontend-3.png"/>
+
+<img width="100%" src="/ocms/frontend-4.png"/>
 
 ## Challenges and Learnings
 Managing global state with Redux was tricky at first, especially handling async calls. Designing secure and efficient APIs took some iterations.
