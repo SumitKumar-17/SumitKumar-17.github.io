@@ -1,6 +1,6 @@
 ---
 title: "TinyC Compiler Making"
-description: "Making your own compiler from scratch"
+description: "Making your own TinyC compiler from scratch,using it to compiler your code"
 publishDate: "15 November 2024"
 draft: false
 tags: ["compiler", "lexer", "parser","intermediate-representation","IR","AST","bison"]
