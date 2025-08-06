@@ -1,5 +1,5 @@
 ---
-title: "Building NotebookLM: A Brutal Journey Through Dependency Hell"
+title: "Building NotebookLM: A Journey Through Dependency Hell"
 description: "A assignment to build NotebookLM clone turned into a war against PDF libraries, build tools, and server-side rendering. Here’s what happened."
 publishDate: "6 August 2025"
 draft: false
