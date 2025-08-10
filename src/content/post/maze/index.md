@@ -1,7 +1,8 @@
 ---
 title: "Creating an Animated Maze Solver with Python"
 description: "A look at the process of visualizing maze generation and solving algorithms using Matplotlib and a custom particle system." 
-publishDate: "11 August 2025" draft: false 
+publishDate: "11 August 2025"
+draft: false 
 tags: ["python", "matplotlib", "animation", "algorithms", "visualization"]
 ---
 
