@@ -7,7 +7,7 @@ tags: ["python", "matplotlib", "animation", "algorithms", "visualization"]
 
 ## My Animated Maze Generator & Solver
 
-**(Source Code: [GitHub](https://www.google.com/search?q=https://github.com/your-username/your-repo-name-here))**
+**(Source Code: [GitHub](https://github.com/SumitKumar-17/maze))**
 
 I set out to create a Python script that would visualize maze generation and solving algorithms as a clean, animated video. The project was a great learning experience in animation and performance, and I'm excited to share how it works.
 
