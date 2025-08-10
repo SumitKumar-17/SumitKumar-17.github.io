@@ -26,7 +26,7 @@ Easy enough. Then came the PDF libraries.
 ## What It's Supposed To Do (The Happy Path)
 The idea is simple. You go to the site, upload a PDF, and you get a split-screen view: PDF on one side, chat on the other.
 
-<img width="100%" src="/notebooklm/image.png"/> alt="Screenshot of the NotebookLM clone showing a PDF viewer and chat interface"/>
+<img width="100%" src="/notebooklm/image.png" alt="Screenshot of the NotebookLM clone showing a PDF viewer and chat interface"/>
 
 You can ask questions like "What does this document say about project X?" and the AI (using Gemini) reads through the text, finds the answer, and spits it back out with a little `[Page: 5]` button. You click the button, and the PDF viewer on the left jumps right to that page.
 
