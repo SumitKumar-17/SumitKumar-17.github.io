@@ -10,7 +10,7 @@ I recently went down a rabbit hole and built a mini-Kafka in C. Why? Because I w
 
 This project, which I’m calling **C-Kafka**, isn’t a feature-complete Kafka clone, but it implements some of the core concepts that make the real Kafka a performance beast. Let’s break down a few of the most interesting parts.
 
-Source Code: [GitHub](https://github.com/SumitKumar-17/C-Kafka)**
+**Source Code: [GitHub](https://github.com/SumitKumar-17/C-Kafka)**
 
 ---
 ## Zero-Copy: Because Copying Data is for the Birds
