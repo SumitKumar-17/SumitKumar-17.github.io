@@ -94,6 +94,3 @@ This is a more advanced optimization, and it won’t always provide a benefit, b
 -----
 
 Building C-Kafka was a fantastic learning experience. It’s one thing to read about these concepts, but implementing them from scratch really solidifies your understanding. If you’re interested in systems programming or just want to see how a project like this is put together, feel free to check out the source code.
-
-
-```
