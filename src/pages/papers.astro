@@ -1,0 +1,248 @@
+---
+import PageLayout from '@/layouts/Base.astro';
+
+const categories = [
+  {
+    topic: "Protobuf",
+    papers: [
+      { title: "Protobuf parsing Blog", url: "https://mcyoung.xyz/2025/07/16/hyperpb/" },
+    ]
+  },
+  {
+    topic: "Operating Systems",
+    papers: [
+      { title: "The Multikernel: A new OS architecture for scalable multicore systems", url: "https://www.sigops.org/s/conferences/sosp/2009/papers/baumann-sosp09.pdf" },
+    ]
+  },
+  {
+    topic: "Databases",
+    papers: [
+      { title: "Google File System", url: "https://storage.googleapis.com/gweb-research2023-media/pubtools/4446.pdf" },
+      { title: "MapReduce: Simplified Data Processing on Large Clusters", url: "https://storage.googleapis.com/gweb-research2023-media/pubtools/4449.pdf" },
+      { title: "Bigtable: A Distributed Storage System for Structured Data", url: "https://storage.googleapis.com/gweb-research2023-media/pubtools/4443.pdf" },
+      { title: "Colossus (Next-Gen GFS successor)", url: "https://cloud.google.com/blog/products/storage-data-transfer/a-peek-behind-colossus-googles-file-system" },
+      { title: "Megastore: Providing Scalable, Highly Available Storage for Interactive Services", url: "https://www.cidrdb.org/cidr2011/Papers/CIDR11_Paper32.pdf" },
+      { title: "Monarch: Google's Planet-Scale In-Memory Time Series Database", url: "https://storage.googleapis.com/gweb-research2023-media/pubtools/6348.pdf" },
+      { title: "Chubby: The Lock Service for Loosely-Coupled Distributed Systems", url: "https://storage.googleapis.com/gweb-research2023-media/pubtools/4444.pdf" },
+      { title: "Spanner: Google's Globally-Distributed Database", url: "https://storage.googleapis.com/gweb-research2023-media/pubtools/1974.pdf" },
+      { title: "Spanner — CAP-theorem considerations", url: "https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/45855.pdf" },
+      { title: "Dapper: A Large-Scale Distributed Systems Tracing Infrastructure", url: "https://static.googleusercontent.com/media/research.google.com/en//archive/papers/dapper-2010-1.pdf" },
+      { title: "Borg Cluster Management (SOSP 2015)", url: "https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/43438.pdf" },
+      { title: "Zanzibar: Google's Consistent, Global Authorization System", url: "https://storage.googleapis.com/gweb-research2023-media/pubtools/5068.pdf" },
+      { title: "Pregel: A System for Large-Scale Graph Processing", url: "https://15799.courses.cs.cmu.edu/fall2013/static/papers/p135-malewicz.pdf" },
+      { title: "Napa: Data Warehousing (Google internal)", url: "https://www.vldb.org/pvldb/vol14/p2986-sankaranarayanan.pdf" },
+      { title: "Napa: Partitioning Algorithm", url: "https://www.vldb.org/pvldb/vol16/p3475-sankaranarayanan.pdf" },
+      { title: "F1: Fast Analytics on a Distributed RDBMS", url: "https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/41344.pdf" },
+      { title: "Mesa: Data Warehousing System", url: "https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/42851.pdf" },
+      { title: "Google Firestore", url: "https://storage.googleapis.com/gweb-research2023-media/pubtools/7076.pdf" },
+      { title: "Amazon Aurora DB Architecture", url: "https://pages.cs.wisc.edu/~yxy/cs764-f20/papers/aurora-sigmod-17.pdf" },
+      { title: "DynamoDB: A NoSQL Database Service", url: "https://assets.amazon.science/33/9d/b77f13fe49a798ece85cf3f9be6d/amazon-dynamodb-a-scalable-predictably-performant-and-fully-managed-nosql-database-service.pdf" },
+      { title: "Apple FoundationDB: A NewSQL Database", url: "https://www.foundationdb.org/files/fdb-paper.pdf" },
+      { title: "TikTok Monolith: Embedding in Real-Time", url: "https://arxiv.org/pdf/2209.07663" },
+      { title: "Gorilla: Time Series Database", url: "https://www.vldb.org/pvldb/vol8/p1816-teller.pdf" },
+      { title: "Cassandra: A Decentralized Structured Storage System", url: "https://www.cs.cornell.edu/projects/ladis2009/papers/lakshman-ladis2009.pdf" },
+      { title: "Memcache: In-Memory Cache at Facebook", url: "https://scontent.fdel29-1.fna.fbcdn.net/v/t39.8562-6/240873052_277412237132971_6278324660880331641_n.pdf" },
+    ]
+  }
+];
+
+const meta = {
+  title: "Papers",
+  description: "A curated collection of research papers and blogs across systems, databases, and infrastructure.",
+};
+---
+
+<PageLayout meta={meta}>
+  <div class="space-y-8">
+    <div class="space-y-3 text-center md:text-left">
+      <h1 class="title text-3xl font-bold text-white">{meta.title}</h1>
+      <p class="text-base text-gray-400">{meta.description}</p>
+    </div>
+
+    <div class="vertical-tabs-container">
+      <!-- Sidebar -->
+      <div class="tab-buttons-vertical" role="tablist" aria-orientation="vertical">
+        {categories.map((category, index) => (
+          category.papers.length > 0 && (
+            <button
+              id={`tab-${index}`}
+              class:list={["tab-button", { active: index === 0 }]}
+              data-tab-index={index}
+              role="tab"
+              aria-controls={`panel-${index}`}
+              aria-selected={index === 0 ? 'true' : 'false'}
+            >
+              {category.topic}
+            </button>
+          )
+        ))}
+      </div>
+
+      <!-- Content -->
+      <div class="tab-content-vertical">
+        {categories.map((category, index) => (
+          category.papers.length > 0 && (
+            <div
+              id={`panel-${index}`}
+              class:list={["tab-panel", { hidden: index !== 0 }]}
+              role="tabpanel"
+              aria-labelledby={`tab-${index}`}
+            >
+              <ul class="grid gap-4 md:grid-cols-2">
+                {category.papers.map(paper => (
+                  <li>
+                    <a href={paper.url} target="_blank" rel="noopener noreferrer" class="group block">
+                      <h3 class="flex items-center gap-1 text-lg font-semibold text-gray-100 transition-colors group-hover:text-accent">
+                        {paper.title} <span aria-hidden="true">↗</span>
+                      </h3>
+                      <p class="mt-1 text-xs text-gray-400">
+                        {paper.url}
+                      </p>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )
+        ))}
+      </div>
+    </div>
+  </div>
+</PageLayout>
+
+<style>
+  .vertical-tabs-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .vertical-tabs-container {
+      flex-direction: row;
+      gap: 2rem;
+      align-items: flex-start;
+    }
+  }
+
+  .tab-buttons-vertical {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--gray-700);
+    padding-bottom: 0.75rem;
+    gap: 0.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .tab-buttons-vertical {
+      flex-direction: column;
+      border-bottom: none;
+      border-right: 1px solid var(--gray-700);
+      padding: 1rem;
+      width: 200px;
+      background: var(--gray-900);
+      border-radius: 0.75rem;
+      gap: 0.5rem;
+      flex-shrink: 0;
+    }
+  }
+
+  .tab-button {
+    padding: 0.6rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    color: var(--gray-400);
+    text-align: left;
+    transition: all 0.25s ease;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .tab-button:hover {
+    background: var(--gray-800);
+    color: var(--gray-200);
+  }
+
+  .tab-button.active {
+    background: var(--accent);
+    color: white;
+  }
+
+  .tab-content-vertical {
+    flex: 1;
+  }
+
+  .tab-panel.hidden {
+    display: none;
+  }
+
+  /* Paper cards */
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  li a {
+    display: block;
+    padding: 1rem 1.25rem;
+    background: var(--gray-900);
+    border-radius: 0.75rem;
+    border: 1px solid var(--gray-700);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  li a:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  }
+
+  li h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--gray-100);
+  }
+
+  li p {
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+    color: var(--gray-500);
+    word-break: break-all;
+  }
+
+  .space-y-3 > :global(* + *) { margin-top: 0.75rem; }
+  .space-y-5 > :global(* + *) { margin-top: 1.25rem; }
+  .space-y-8 > :global(* + *) { margin-top: 2rem; }
+</style>
+
+<script>
+  const container = document.querySelector('.vertical-tabs-container');
+  const tabButtons = container.querySelectorAll('.tab-button');
+  const tabPanels = container.querySelectorAll('.tab-panel');
+
+  container.addEventListener('click', (e) => {
+    const clickedTab = e.target.closest('.tab-button');
+    if (!clickedTab) return;
+
+    e.preventDefault();
+    const index = clickedTab.getAttribute('data-tab-index');
+
+    tabButtons.forEach(button => {
+      button.classList.remove('active');
+      button.setAttribute('aria-selected', 'false');
+    });
+    tabPanels.forEach(panel => {
+      panel.classList.add('hidden');
+    });
+
+    clickedTab.classList.add('active');
+    clickedTab.setAttribute('aria-selected', 'true');
+    const activePanel = container.querySelector(`#panel-${index}`);
+    if (activePanel) {
+      activePanel.classList.remove('hidden');
+    }
+  });
+</script>
