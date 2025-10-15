@@ -1,6 +1,6 @@
 ---
 title: "Deploying a Next.js/React/Express Application with Nginx and PM2"
-description: "A comprehensive guide for deploying a Next.js, React.js, Vite, or Express.js application on an Ubuntu EC2 instance using Nginx as a reverse proxy and PM2 for process management."
+description: "A comprehensive guide for deploying on an Ubuntu EC2 instance using Nginx and PM2 for process management."
 publishDate: "15 October 2025"
 draft: false
 tags: ["deployment", "nginx", "pm2", "next.js", "react", "ec2", "ubuntu"]
