@@ -8,14 +8,14 @@ tags: ["deployment", "nginx", "pm2", "next.js", "react", "ec2", "ubuntu"]
 
 This script is written for an Ubuntu EC2 instance.
 
-1. System Update and Nginx Installation
+## 1. System Update and Nginx Installation
 ```sh
 sudo apt-get update
 sudo apt-get upgrade
 sudo apt-get install nginx
 ```
 
-2\. Install Node.js via NVM
+## 2\. Install Node.js via NVM
 
 ```sh
 curl -o- [https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh](https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh) | bash
@@ -24,7 +24,7 @@ nvm install 20.15.1
 nvm use 20.15.1
 ```
 
-3\. Generate SSH Key
+## 3\. Generate SSH Key
 
 ```sh
 ssh-keygen -t rsa -b 4096 -C "your_email@example.com" -f ~/.ssh/id_rsa -N ""
@@ -35,7 +35,7 @@ cat ~/.ssh/id_rsa.pub
 
 Add this public SSH key to your GitHub account settings.
 
-4\. Clone and Setup Project
+## 4\. Clone and Setup Project
 
 ```sh
 git clone <repo-url> ~
@@ -45,7 +45,7 @@ npm run build
 cd ~
 ```
 
-5\. Configure Nginx for Reverse Proxy
+## 5\. Configure Nginx for Reverse Proxy
 
 Create a new Nginx configuration file. Replace `{folder_name}` with your project's name for clarity.
 
@@ -79,7 +79,7 @@ sudo nginx -t
 sudo service nginx restart
 ```
 
-6\. Process Management with PM2
+## 6\. Process Management with PM2
 
 Install PM2 globally and start your application.
 
@@ -90,7 +90,7 @@ pm2 start npm --name "my-app" -- start
 
 **Note:** Before this step, ensure your domain's DNS records (e.g., in AWS Route 53) point to your EC2 instance's public IPv4 address.
 
-7\. Setup HTTPS with Certbot
+## 7\. Setup HTTPS with Certbot
 
 Install Certbot to secure your site with a free SSL certificate from Let's Encrypt.
 
@@ -102,7 +102,7 @@ sudo certbot --nginx -d your_domain_name
 
 -----
 
-PM2 Commands for Different Frameworks
+## PM2 Commands for Different Frameworks
 
 | Framework         | PM2 Command                                      |
 | ----------------- | ------------------------------------------------ |
@@ -113,11 +113,11 @@ PM2 Commands for Different Frameworks
 
 -----
 
-Redeploying After Code Changes
+## Redeploying After Code Changes
 
 Follow these steps to update your application on the EC2 instance after pushing new code to your repository.
 
- 1\. Pull the Latest Code
+### 1\. Pull the Latest Code
 
 Navigate to your project directory, pull the latest changes, and rebuild.
 
@@ -128,7 +128,7 @@ npm i
 npm run build
 ```
 
- 2\. Restart the Application Using PM2
+### 2\. Restart the Application Using PM2
 
 List all running processes to find the name or ID of your application.
 
@@ -156,7 +156,7 @@ pm2 logs <app_name_or_id>
 
 -----
 
-Nginx Configuration for a Static PHP Site
+## Nginx Configuration for a Static PHP Site
 
 If hosting a simple PHP project, your Nginx configuration might look like this:
 
@@ -179,7 +179,7 @@ server {
 }
 ```
 
-Useful References
+## Useful References
 
   - [Nginx Installation & SSL Setup with Certbot on AWS EC2](https://dev.to/ashirbadgudu/nginx-installation-https-ssl-setup-with-certbot-in-aws-ec2-1ee6)
   - [Deploying a Next.js App on EC2 with PM2 and Nginx](https://suvankar.medium.com/deploying-a-next-js-application-on-an-ec2-instance-with-pm2-and-nginx-922975ecd611)
