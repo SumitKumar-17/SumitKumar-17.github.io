@@ -1,5 +1,5 @@
 ---
-title: "Deploying a Next.js/React/Express Application with Nginx and PM2"
+title: "Deploying a Next.js/React/Express Application"
 description: "A comprehensive guide for deploying on an Ubuntu EC2 instance using Nginx and PM2 for process management."
 publishDate: "15 October 2025"
 draft: false
