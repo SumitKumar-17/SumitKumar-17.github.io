@@ -73,7 +73,7 @@ export default defineConfig({
   // https://docs.astro.build/en/guides/prefetch/
   prefetch: true,
   // ! Please remember to replace the following site property with your own domain
-  site: 'https://sumitk.me/',
+  site: 'https://sumitkumar-snowy.vercel.app/',
   vite: {
     optimizeDeps: {
       exclude: ['@resvg/resvg-js'],
