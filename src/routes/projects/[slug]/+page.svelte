@@ -8,9 +8,18 @@
   export let data: PageData;
   $: project = data.project;
 
-  const images = import.meta.glob("../../../projects/*.{png,jpg,svg}", {
+  const rawImages = import.meta.glob("../../../projects/*/*.{png,jpg,svg}", {
     eager: true,
-  }) as any;
+  }) as Record<string, { default: string }>;
+
+  // Keyed by bare filename so it matches Project.svelte's lookup regardless
+  // of how deep this route is nested relative to src/projects.
+  const images: Record<string, string> = Object.fromEntries(
+    Object.entries(rawImages).map(([path, mod]) => [
+      path.split("/").pop() as string,
+      mod.default,
+    ])
+  );
 
   let stars: Record<string, number> | null = null;
   onMount(async () => {

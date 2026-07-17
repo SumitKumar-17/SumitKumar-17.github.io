@@ -5,15 +5,24 @@
   import Seo from "$lib/components/Seo.svelte";
   import ProjectTeaser from "./ProjectTeaser.svelte";
 
-  const projects = import.meta.glob("../../projects/*.md", {
+  const projects = import.meta.glob("../../projects/*/index.md", {
     eager: true,
   }) as any;
-  const images = import.meta.glob("../../projects/*.{png,jpg,svg}", {
+  const rawImages = import.meta.glob("../../projects/*/*.{png,jpg,svg}", {
     eager: true,
-  }) as any;
+  }) as Record<string, { default: string }>;
+
+  // Keyed by bare filename (e.g. "keystonedb.png") so lookups don't depend on
+  // how deep the importing route is nested relative to src/projects.
+  const images: Record<string, string> = Object.fromEntries(
+    Object.entries(rawImages).map(([path, mod]) => [
+      path.split("/").pop() as string,
+      mod.default,
+    ])
+  );
 
   function trimName(id: string) {
-    return id.match(/\.\.\/projects\/(.*)\.md$/)?.[1];
+    return id.match(/\.\.\/projects\/(.*)\/index\.md$/)?.[1];
   }
 
   function slugOf(id: string): string {
@@ -60,7 +69,7 @@
 
   <p class="text-lg mb-4">
     Most of these started as course lab assignments that I got a little too
-    invested in — a database engine, a compiler, a mini Kafka in C — plus a
+    invested in - a database engine, a compiler, a mini Kafka in C - plus a
     handful of side projects I built because I wanted the tool to exist.
   </p>
 

@@ -6,6 +6,7 @@
   type ProjectMeta = {
     title: string;
     date: string;
+    content: string;
     repo?: string;
     topics: string[];
     lead: string;
@@ -16,8 +17,24 @@
 
   export let data: ProjectMeta;
   export let slug: string;
-  export let images: Record<string, { default: string }>;
+  export let images: Record<string, string>;
   export let stars: Record<string, number> | null = null;
+
+  // A quick plaintext-ish excerpt of the writeup's first paragraph. This
+  // whole card is one <a>, so we can't render real Markdown links/HTML here
+  // without nesting anchors — just strip the common markdown tokens instead.
+  function excerptOf(markdown: string): string {
+    const firstBlock = markdown.trim().split(/\n\s*\n/)[0] ?? "";
+    return firstBlock
+      .replace(/^>\s*/gm, "")
+      .replace(/\*\*(.*?)\*\*/g, "$1")
+      .replace(/\*(.*?)\*/g, "$1")
+      .replace(/`([^`]*)`/g, "$1")
+      .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
+      .trim();
+  }
+
+  $: excerpt = excerptOf(data.content);
 </script>
 
 <a class="teaser group block" href="/projects/{slug}">
@@ -47,6 +64,7 @@
   <div class="grid grid-cols-3 gap-4 md:gap-8 lg:gap-12">
     <div class="col-span-3" class:md:col-span-2={data.image}>
       <p class="text-lg font-light mb-2">{data.lead}</p>
+      <p class="text-neutral-600 mb-3 line-clamp-3">{excerpt}</p>
       <span class="read-more">
         Read the full writeup
         <ArrowUpRight size={16} class="inline text-neutral-400" />
@@ -55,7 +73,7 @@
     {#if data.image}
       <div class="col-span-3 md:col-span-1">
         <img
-          src={images[`../../projects/${data.image}`]?.default}
+          src={images[data.image]}
           alt="{data.title} preview image"
           class:border={data.image_border}
           class:rounded-md={data.image_rounded}

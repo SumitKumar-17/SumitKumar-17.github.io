@@ -65,8 +65,8 @@
     </p>
 
     <p>
-      I like working on <em>systems</em> — databases, compilers, distributed
-      systems, GPU and AI infra, and the Linux kernel — and I have a habit of
+      I like working on <em>systems</em> - databases, compilers, distributed
+      systems, GPU and AI infra, and the Linux kernel - and I have a habit of
       turning ordinary course assignments, or a small tool I needed, into
       projects I get way too invested in.
     </p>
@@ -109,7 +109,7 @@
     <p>
       I'm also a developer for
       <a class="link" href="https://www.instagram.com/iitkgp.springfest/">Spring Fest</a>,
-      IIT Kharagpur's annual cultural festival — one of the student-run
+      IIT Kharagpur's annual cultural festival - one of the student-run
       technical societies, not a course or a job, where I help build and
       scale the platform that actually runs the fest: registrations,
       ticketing, payments, and event access for tens of thousands of
@@ -117,7 +117,7 @@
     </p>
 
     <p>
-      I also spend time contributing to open source — patches to <a
+      I also spend time contributing to open source - patches to <a
         class="link"
         href="https://supabase.com/">Supabase</a
       >,
@@ -127,7 +127,7 @@
 
     <p>
       Before college, I spent a couple of years deep in JEE and other
-      engineering entrance exam prep — it paid off, and I made it into IIT.
+      engineering entrance exam prep - it paid off, and I made it into IIT.
     </p>
 
     <p>

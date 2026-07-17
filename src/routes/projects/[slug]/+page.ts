@@ -1,12 +1,12 @@
 import { error } from "@sveltejs/kit";
 import type { EntryGenerator, PageLoad } from "./$types";
 
-const projects = import.meta.glob("../../../projects/*.md", {
+const projects = import.meta.glob("../../../projects/*/index.md", {
   eager: true,
 }) as any;
 
 function trimName(id: string) {
-  return id.match(/\.\.\/\.\.\/\.\.\/projects\/(.*)\.md$/)?.[1];
+  return id.match(/\.\.\/\.\.\/\.\.\/projects\/(.*)\/index\.md$/)?.[1];
 }
 
 export const prerender = true;

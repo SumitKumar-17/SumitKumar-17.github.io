@@ -47,7 +47,7 @@
         codeforcesRank = data.result[0].rank ?? null;
       }
     } catch {
-      // Codeforces API unreachable — the plain profile link below still works.
+      // Codeforces API unreachable - the plain profile link below still works.
     }
   });
 </script>
@@ -138,20 +138,20 @@
   <div class="mb-4">
     <div class="flex justify-between items-end">
       <h3 class="text-black text-lg">Indian Institute of Technology, Kharagpur</h3>
-      <div class="text-neutral-500 mb-0.5">2022 — Present</div>
+      <div class="text-neutral-500 mb-0.5">2022 - Present</div>
     </div>
     <p class="byline">
       5-year Dual Degree (B.Tech + M.Tech) in Computer Science and Engineering
-      — CGPA 8.82/10
+      - CGPA 8.82/10
     </p>
   </div>
 
   <div class="mb-4">
     <div class="flex justify-between items-end">
       <h3 class="text-black text-lg">Delhi Public School, Kalyanpur</h3>
-      <div class="text-neutral-500 mb-0.5">2020 — 2022</div>
+      <div class="text-neutral-500 mb-0.5">2020 - 2022</div>
     </div>
-    <p class="byline">Class XII (CBSE), 94.2% — Class X (CBSE), 96.6%</p>
+    <p class="byline">Class XII (CBSE), 94.2% - Class X (CBSE), 96.6%</p>
   </div>
 
   <h4 class="font-medium mt-4 mb-1">Core CS & Systems:</h4>
@@ -247,7 +247,7 @@
         <a class="link" href={profile.href} target="_blank" rel="noreferrer">
           {profile.name}
         </a>
-        <span class="text-neutral-500"> — {profile.handle}</span>
+        <span class="text-neutral-500"> - {profile.handle}</span>
         {#if profile.name === "Codeforces" && codeforcesRating !== null}
           <span class="cf-rating">
             {codeforcesRating}{codeforcesRank ? ` (${codeforcesRank})` : ""}

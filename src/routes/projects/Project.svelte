@@ -18,8 +18,12 @@
   };
 
   export let data: Project;
-  export let images: Record<string, { default: string }>;
+  export let images: Record<string, string>;
   export let stars: Record<string, number> | null = null;
+
+  $: allImages = [data.image, ...(data.subimages ?? [])].filter(
+    (name): name is string => Boolean(name)
+  );
 </script>
 
 <!-- Title -->
@@ -50,38 +54,36 @@
   {/each}
 </div>
 
-<!-- Description and image -->
+<!-- Single image: full-width hero above the writeup, so the text column -->
+<!-- never gets squeezed into a narrow side rail. -->
+{#if allImages.length === 1}
+  <a rel="external" href={images[allImages[0]]} class="block mb-4">
+    <img
+      src={images[allImages[0]]}
+      alt="{data.title} preview image"
+      class="w-full"
+      class:border={data.image_border}
+      class:rounded-md={data.image_rounded}
+    />
+  </a>
+{/if}
+
 <div class="space-y-4">
-  <div class="grid grid-cols-3 gap-4 md:gap-8 lg:gap-12">
-    <div class="col-span-3" class:md:col-span-2={data.image}>
-      <p class="text-lg font-light mb-3">{data.lead}</p>
-      <Markdown source={data.content} />
-    </div>
-    {#if data.image}
-      <div class="col-span-3 md:col-span-1">
-        <a rel="external" href={images[`../../projects/${data.image}`]?.default}>
+  <p class="text-lg font-light mb-3">{data.lead}</p>
+  <Markdown source={data.content} />
+
+  <!-- Multiple images: a gallery grid below the writeup instead of one -->
+  <!-- thumbnail wedged next to the text and the rest scattered underneath. -->
+  {#if allImages.length > 1}
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-6">
+      {#each allImages as image}
+        <a rel="external" href={images[image]}>
           <img
-            src={images[`../../projects/${data.image}`]?.default}
+            src={images[image]}
             alt="{data.title} preview image"
-            class:border={data.image_border}
-            class:rounded-md={data.image_rounded}
+            class="w-full"
           />
         </a>
-      </div>
-    {/if}
-  </div>
-
-  {#if data.subimages}
-    <div class="grid grid-cols-3 gap-4 md:gap-8 lg:gap-12">
-      {#each data.subimages as image}
-        <div class="col-span-full md:col-span-1">
-          <a rel="external" href={images[`../../projects/${image}`]?.default}>
-            <img
-              src={images[`../../projects/${image}`]?.default}
-              alt="{data.title} subimage"
-            />
-          </a>
-        </div>
       {/each}
     </div>
   {/if}

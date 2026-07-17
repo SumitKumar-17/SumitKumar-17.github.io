@@ -33,7 +33,7 @@
     <a href="/">{SITE_NAME}</a>
     {#if pageTitle}
       <span class="page-title">
-        <span class="text-neutral-400">—</span>
+        <span class="text-neutral-400">-</span>
         {pageTitle}
       </span>
     {/if}
