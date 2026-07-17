@@ -1,17 +1,9 @@
 {
-  "extends": "astro/tsconfigs/strictest",
+  "extends": "./.svelte-kit/tsconfig.json",
   "compilerOptions": {
-    "baseUrl": ".",
-    "lib": ["es2022", "dom", "dom.iterable"],
-    "paths": {
-      "@/assets/*": ["src/assets/*"],
-      "@/components/*": ["src/components/*"],
-      "@/data/*": ["src/data/*"],
-      "@/layouts/*": ["src/layouts/*"],
-      "@/utils/*": ["src/utils/*"],
-      "@/types": ["src/types.ts"],
-      "@/site-config": ["src/site.config.ts"]
-    }
-  },
-  "exclude": ["node_modules", "**/node_modules/*", ".vscode", "dist"]
+    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true
+  }
 }
