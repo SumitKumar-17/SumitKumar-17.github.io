@@ -39,7 +39,7 @@
 
 <Seo
   title="Sumit Kumar"
-  description="Fourth-year CS undergrad at IIT Kharagpur. Building systems, databases, compilers, and things I get too invested in."
+  description="Final-year dual degree (B.Tech + M.Tech) CS student at IIT Kharagpur. Building systems, databases, compilers, and things I get too invested in."
 />
 
 <p
@@ -47,6 +47,7 @@
   id="sumit-is"
 >
   <span class="g">is a</span> student<span class="g">,</span><br />
+  researcher<span class="g">,</span><br />
   systems tinkerer<span class="g">, and</span><br />
   builder<span class="g">.</span>
 </p>
@@ -54,8 +55,9 @@
 <div class="layout-md text-lg space-y-14">
   <div class="space-y-5">
     <p>
-      I'm a fourth-year undergrad in <a class="link" href="/resume"
-        >Computer Science and Engineering</a
+      I'm in my final year of the dual degree (B.Tech + M.Tech) program in <a
+        class="link"
+        href="/resume">Computer Science and Engineering</a
       >
       at the <a class="link" href="https://www.iitkgp.ac.in/">Indian Institute
         of Technology, Kharagpur</a
@@ -64,15 +66,16 @@
 
     <p>
       I like working on <em>systems</em> — databases, compilers, distributed
-      systems, and the Linux kernel — and I have a habit of turning ordinary
-      course lab assignments into projects I get way too invested in.
+      systems, GPU and AI infra, and the Linux kernel — and I have a habit of
+      turning ordinary course assignments, or a small tool I needed, into
+      projects I get way too invested in.
     </p>
 
     <p>
       Towards that goal, I care about understanding how things work from the
       ground up: writing a SQL parser instead of using one, building a mini
-      Kafka to understand why the real one is fast, implementing my own
-      RISC processor instead of just studying one.
+      Kafka to understand why the real one is fast, implementing my own RISC
+      processor instead of just studying one.
     </p>
   </div>
 
@@ -94,24 +97,43 @@
 
   <div class="space-y-5">
     <p>
-      I've interned at <a class="link" href="https://paralleldots.com/"
-        >ParallelDots</a
-      >, and led backend/platform work for <a class="link"
-        href="https://springfest.iitkgp.ac.in/">Spring Fest</a
-      >, IIT Kharagpur's annual cultural festival, scaling its systems to
-      handle 100M+ API requests.
+      I've interned at <a class="link" href="https://www.atlassian.com/"
+        >Atlassian</a
+      >, <a class="link" href="https://paralleldots.com/">ParallelDots</a>,
+      <a class="link" href="https://qficapital.in/">QFI Capital</a>, and
+      <a class="link" href="https://autonmis.com/">Autonmis</a>, and currently
+      work as a developer at
+      <a class="link" href="https://stepsai.ca/">StepsAI</a>.
     </p>
 
     <p>
-      Before college, I placed in JEE Advanced, and along the way I've
-      contributed patches to <a class="link" href="https://nixos.org/"
-        >NixOS</a
-      >
-      and served as unit leader for our campus's National Service Scheme
-      chapter.
+      I'm also a developer for
+      <a class="link" href="https://www.instagram.com/iitkgp.springfest/">Spring Fest</a>,
+      IIT Kharagpur's annual cultural festival — one of the student-run
+      technical societies, not a course or a job, where I help build and
+      scale the platform that actually runs the fest: registrations,
+      ticketing, payments, and event access for tens of thousands of
+      attendees.
     </p>
 
-    <p>Other interests: basketball, and long walks with friends.</p>
+    <p>
+      I also spend time contributing to open source — patches to <a
+        class="link"
+        href="https://supabase.com/">Supabase</a
+      >,
+      <a class="link" href="https://github.com/stripe">Stripe</a>, and
+      <a class="link" href="https://nixos.org/">NixOS</a>, among other things.
+    </p>
+
+    <p>
+      Before college, I spent a couple of years deep in JEE and other
+      engineering entrance exam prep — it paid off, and I made it into IIT.
+    </p>
+
+    <p>
+      Other interests: basketball, swimming, sleeping in, and traveling. I
+      also spent two years volunteering with NSS on campus.
+    </p>
   </div>
 
   <div class="space-y-5">

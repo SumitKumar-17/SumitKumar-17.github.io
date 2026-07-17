@@ -7,7 +7,7 @@
 
 <Seo
   title="Sumit Kumar – Resume"
-  description="Fourth-year CS undergrad at IIT Kharagpur. Building systems, databases, compilers, and things I get too invested in."
+  description="Final-year CS undergrad at IIT Kharagpur. Building systems, databases, compilers, and things I get too invested in."
 />
 
 <section class="layout-md pt-12">
