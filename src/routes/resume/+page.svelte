@@ -1,8 +1,55 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import { FileText } from "lucide-svelte";
 
   import Seo from "$lib/components/Seo.svelte";
   import Workplace from "./Workplace.svelte";
+
+  const cpProfiles = [
+    {
+      name: "Codeforces",
+      handle: "sumitkumar-17",
+      href: "https://codeforces.com/profile/sumitkumar-17",
+    },
+    {
+      name: "LeetCode",
+      handle: "SumitKumar-17",
+      href: "https://leetcode.com/SumitKumar-17",
+      rating: "2181 (Guardian)",
+    },
+    {
+      name: "CSES",
+      handle: "sumitkumar-17",
+      href: "https://cses.fi/user/279033",
+    },
+    {
+      name: "AtCoder",
+      handle: "SumitKumar17",
+      href: "https://atcoder.jp/users/SumitKumar17",
+    },
+    {
+      name: "CodeChef",
+      handle: "sumitkumar173",
+      href: "https://www.codechef.com/users/sumitkumar173",
+    },
+  ];
+
+  let codeforcesRating: number | null = null;
+  let codeforcesRank: string | null = null;
+  onMount(async () => {
+    try {
+      const resp = await fetch(
+        "https://codeforces.com/api/user.info?handles=sumitkumar-17"
+      );
+      const data = await resp.json();
+      if (data.status === "OK") {
+        codeforcesRating = data.result[0].rating ?? null;
+        codeforcesRank = data.result[0].rank ?? null;
+      }
+    } catch {
+      // Codeforces API unreachable — the plain profile link below still works.
+    }
+  });
 </script>
 
 <Seo
@@ -95,7 +142,7 @@
     </div>
     <p class="byline">
       5-year Dual Degree (B.Tech + M.Tech) in Computer Science and Engineering
-      — CGPA 8.73/10
+      — CGPA 8.82/10
     </p>
   </div>
 
@@ -107,33 +154,59 @@
     <p class="byline">Class XII (CBSE), 94.2% — Class X (CBSE), 96.6%</p>
   </div>
 
-  <h4 class="font-medium mt-4 mb-1">Computer Science:</h4>
+  <h4 class="font-medium mt-4 mb-1">Core CS & Systems:</h4>
   <ul>
     <li>Programming and Data Structures</li>
-    <li>Algorithm-I</li>
-    <li>Software Engineering</li>
+    <li>Discrete Structures</li>
+    <li>Algorithms I & II</li>
     <li>Computer Organization and Architecture</li>
+    <li>High Performance Computer Architecture</li>
     <li>Compilers</li>
-    <li>Database Management Systems</li>
+    <li>Formal Language and Automata Theory</li>
+    <li>Switching Circuits and Logic Design</li>
+    <li>Software Engineering</li>
     <li>Operating Systems</li>
     <li>Computer Networks</li>
+    <li>Database Management Systems</li>
+    <li>Foundations of Cryptography</li>
   </ul>
 
-  <h4 class="font-medium mt-4 mb-1">Mathematics:</h4>
+  <h4 class="font-medium mt-4 mb-1">AI, ML & Data:</h4>
+  <ul>
+    <li>Data Analytics</li>
+    <li>Machine Learning</li>
+    <li>Statistical Learning Theory</li>
+    <li>Information Retrieval</li>
+    <li>AI and Ethics</li>
+    <li>Application of Machine Learning in Biological Systems</li>
+    <li>Ubiquitous Computing</li>
+  </ul>
+
+  <h4 class="font-medium mt-4 mb-1">Mathematics & Science:</h4>
   <ul>
     <li>Advanced Calculus</li>
-    <li>Linear Algebra and Numerical and Complex Analysis</li>
+    <li>Linear Algebra, Numerical and Complex Analysis</li>
     <li>Probability & Statistics</li>
-    <li>Discrete Structures</li>
-    <li>Formal Language and Automata Theory</li>
+    <li>Signals and Systems</li>
+    <li>Basic Electronics</li>
+    <li>Physics of Waves</li>
+    <li>Chemistry</li>
+    <li>Basic Engineering Mechanics</li>
+    <li>Electrical Technology</li>
+    <li>Environmental Science</li>
+    <li>Science of Living Systems</li>
   </ul>
 
-  <h4 class="font-medium mt-4 mb-1">More Courses:</h4>
+  <h4 class="font-medium mt-4 mb-1">Business, Humanities & Design:</h4>
   <ul>
-    <li>Basic Electronics</li>
-    <li>Switching Circuits and Logic Design</li>
-    <li>Machine Learning</li>
-    <li>Data Analytics</li>
+    <li>English for Communication</li>
+    <li>German</li>
+    <li>Introduction to Innovation and Entrepreneurship</li>
+    <li>Entrepreneurship Essentials</li>
+    <li>Small Business Development</li>
+    <li>Technopreneurial Marketing</li>
+    <li>Positive Psychology</li>
+    <li>Engineering Drawing and Computer Graphics</li>
   </ul>
 </section>
 
@@ -166,12 +239,34 @@
 </section>
 
 <section class="layout-md py-12">
+  <h2 class="heading2">Competitive Programming</h2>
+
+  <ul class="cp-list">
+    {#each cpProfiles as profile}
+      <li>
+        <a class="link" href={profile.href} target="_blank" rel="noreferrer">
+          {profile.name}
+        </a>
+        <span class="text-neutral-500"> — {profile.handle}</span>
+        {#if profile.name === "Codeforces" && codeforcesRating !== null}
+          <span class="cf-rating">
+            {codeforcesRating}{codeforcesRank ? ` (${codeforcesRank})` : ""}
+          </span>
+        {:else if profile.rating}
+          <span class="cf-rating">{profile.rating}</span>
+        {/if}
+      </li>
+    {/each}
+  </ul>
+</section>
+
+<section class="layout-md py-12">
   <h2 class="heading2">Awards and Honors</h2>
 
   <ul>
     <li>
-      Secured <b>AIR 2038</b> in JEE Advanced and <b>AIR 1870</b> in JEE Mains
-      (1.2M candidates), 2022.
+      Secured <b>AIR 2038</b> in JEE Advanced, <b>AIR 1870</b> in JEE Mains
+      (1.2M candidates), and <b>AIR 83</b> in WBJEE, 2022.
     </li>
     <li>
       Contributed to the <b>NixOS</b> open-source project, writing patches,
@@ -191,6 +286,14 @@
 
   ul {
     @apply list-disc pl-7 marker:text-neutral-400;
+  }
+
+  .cp-list li {
+    @apply mb-1.5;
+  }
+
+  .cf-rating {
+    @apply ml-2 text-sm font-medium text-black bg-neutral-100 rounded-full px-2 py-0.5;
   }
 
   .byline {

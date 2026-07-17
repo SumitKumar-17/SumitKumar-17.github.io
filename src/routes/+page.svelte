@@ -6,32 +6,32 @@
   const featuredProjects = [
     {
       name: "KeystoneDB",
-      href: "/projects#keystonedb",
+      href: "/projects/keystonedb",
       desc: "custom relational database engine with its own SQL parser",
     },
     {
       name: "C-Kafka",
-      href: "/projects#c-kafka",
+      href: "/projects/c-kafka",
       desc: "mini Kafka clone in C exploring zero-copy and mmap I/O",
     },
     {
       name: "KTPSocket",
-      href: "/projects#ktpsocket",
+      href: "/projects/ktpsocket",
       desc: "reliable TCP-like flow control built from scratch over UDP",
     },
     {
       name: "NotebookLM Clone",
-      href: "/projects#notebooklm",
+      href: "/projects/notebooklm",
       desc: "chat-with-your-PDFs app, survivor of JS dependency hell",
     },
     {
       name: "Mini RISC Processor",
-      href: "/projects#mini-risc-processor",
+      href: "/projects/mini-risc-processor",
       desc: "pipelined RISC processor in Verilog, run on an FPGA",
     },
     {
       name: "DirScanner",
-      href: "/projects#dirscanner",
+      href: "/projects/dirscanner",
       desc: "CLI tool that renders a directory tree as Markdown",
     },
   ];

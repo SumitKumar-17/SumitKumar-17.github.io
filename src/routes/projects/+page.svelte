@@ -1,11 +1,9 @@
 <script lang="ts">
-  import { page } from "$app/stores";
-
   import { onMount } from "svelte";
   import { CalendarDays, Star } from "lucide-svelte";
 
   import Seo from "$lib/components/Seo.svelte";
-  import Project from "./Project.svelte";
+  import ProjectTeaser from "./ProjectTeaser.svelte";
 
   const projects = import.meta.glob("../../projects/*.md", {
     eager: true,
@@ -18,6 +16,10 @@
     return id.match(/\.\.\/projects\/(.*)\.md$/)?.[1];
   }
 
+  function slugOf(id: string): string {
+    return trimName(id) ?? id;
+  }
+
   $: projectsByDate = Object.keys(projects).sort(
     (a, b) => projects[b].date - projects[a].date
   );
@@ -25,18 +27,6 @@
     const titleA = projects[a].title.toLowerCase();
     const titleB = projects[b].title.toLowerCase();
     return titleA < titleB ? -1 : titleA > titleB ? 1 : 0;
-  });
-
-  onMount(() => {
-    // Hack: Fix the scroll position after the page loads, especially for mobile browsers.
-    const selected = $page.url.hash.slice(1);
-    if (selected) {
-      setTimeout(() => {
-        if ($page.url.hash.slice(1) === selected) {
-          document.getElementById(selected)?.scrollIntoView();
-        }
-      }, 500);
-    }
   });
 
   let stars: Record<string, number> | null = null;
@@ -62,7 +52,7 @@
 
 <Seo
   title="Sumit Kumar – Projects"
-  description="Systems, databases, compilers, and full-stack projects built while studying Computer Science at IIT Kharagpur."
+  description="Systems, databases, compilers, GPU/AI infra, and full-stack projects built while studying Computer Science at IIT Kharagpur."
 />
 
 <section class="layout-md py-12">
@@ -75,8 +65,8 @@
   </p>
 
   <p class="text-lg mb-4">
-    I particularly like databases, compilers, systems programming, and
-    building small dev tools that scratch a very specific itch.
+    I particularly like databases, compilers, systems programming, GPU and AI
+    infra, and building small dev tools that scratch a very specific itch.
   </p>
 
   <p class="text-lg">
@@ -95,7 +85,7 @@
     <ul class="sm:columns-2">
       {#each projectsByTitle as id (id)}
         <li>
-          <a class="link" href="#{trimName(id)}">{projects[id].title}</a>
+          <a class="link" href="/projects/{trimName(id)}">{projects[id].title}</a>
         </li>
       {/each}
     </ul>
@@ -120,9 +110,14 @@
 </div>
 
 {#each sortOrder === "date" ? projectsByDate : projectsByStars as id (id)}
-  <section class="py-10" id={trimName(id)}>
+  <section class="py-10">
     <div class="mx-auto max-w-[1152px] px-4 sm:px-6">
-      <Project data={projects[id]} {images} {stars} />
+      <ProjectTeaser
+        data={projects[id]}
+        slug={slugOf(id)}
+        {images}
+        {stars}
+      />
     </div>
   </section>
 {/each}
