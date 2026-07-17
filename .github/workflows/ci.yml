@@ -3,18 +3,28 @@ name: CI
 on:
   push:
     branches:
-      - main
+      - master
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
   build:
-    name: Build and Deploy
+    name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v4
         with:
-          node-version: "18"
+          node-version: "20"
+          cache: "npm"
 
       - run: npm ci
 
@@ -24,8 +34,17 @@ jobs:
 
       - run: npm run build
 
-      - uses: JamesIves/github-pages-deploy-action@4.1.8
+      - uses: actions/upload-pages-artifact@v3
         with:
-          branch: gh-pages
-          folder: build
-          single-commit: true
+          path: build
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/deploy-pages@v4
+        id: deployment

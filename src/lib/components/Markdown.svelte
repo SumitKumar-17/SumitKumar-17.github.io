@@ -29,9 +29,14 @@
         const lang = (infostring || "").trim().split(/\s+/)[0];
         const { value, language } =
           lang && hljs.getLanguage(lang)
-            ? { value: hljs.highlight(code, { language: lang }).value, language: lang }
+            ? {
+                value: hljs.highlight(code, { language: lang }).value,
+                language: lang,
+              }
             : hljs.highlightAuto(code);
-        return `<pre><code class="hljs language-${language ?? "plaintext"}">${value}</code></pre>`;
+        return `<pre><code class="hljs language-${
+          language ?? "plaintext"
+        }">${value}</code></pre>`;
       },
     },
   });

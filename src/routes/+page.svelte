@@ -59,16 +59,17 @@
         class="link"
         href="/resume">Computer Science and Engineering</a
       >
-      at the <a class="link" href="https://www.iitkgp.ac.in/">Indian Institute
-        of Technology, Kharagpur</a
+      at the
+      <a class="link" href="https://www.iitkgp.ac.in/"
+        >Indian Institute of Technology, Kharagpur</a
       >.
     </p>
 
     <p>
-      I like working on <em>systems</em> - databases, compilers, distributed
-      systems, GPU and AI infra, and the Linux kernel - and I have a habit of
-      turning ordinary course assignments, or a small tool I needed, into
-      projects I get way too invested in.
+      I like working on <em>systems</em> - databases, compilers, distributed systems,
+      GPU and AI infra, and the Linux kernel - and I have a habit of turning ordinary
+      course assignments, or a small tool I needed, into projects I get way too invested
+      in.
     </p>
 
     <p>
@@ -108,12 +109,12 @@
 
     <p>
       I'm also a developer for
-      <a class="link" href="https://www.instagram.com/iitkgp.springfest/">Spring Fest</a>,
-      IIT Kharagpur's annual cultural festival - one of the student-run
-      technical societies, not a course or a job, where I help build and
-      scale the platform that actually runs the fest: registrations,
-      ticketing, payments, and event access for tens of thousands of
-      attendees.
+      <a class="link" href="https://www.instagram.com/iitkgp.springfest/"
+        >Spring Fest</a
+      >, IIT Kharagpur's annual cultural festival - one of the student-run
+      technical societies, not a course or a job, where I help build and scale
+      the platform that actually runs the fest: registrations, ticketing,
+      payments, and event access for tens of thousands of attendees.
     </p>
 
     <p>
@@ -131,8 +132,8 @@
     </p>
 
     <p>
-      Other interests: basketball, swimming, sleeping in, and traveling. I
-      also spent two years volunteering with NSS on campus.
+      Other interests: basketball, swimming, sleeping in, and traveling. I also
+      spent two years volunteering with NSS on campus.
     </p>
   </div>
 

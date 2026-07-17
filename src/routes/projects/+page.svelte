@@ -94,7 +94,9 @@
     <ul class="sm:columns-2">
       {#each projectsByTitle as id (id)}
         <li>
-          <a class="link" href="/projects/{trimName(id)}">{projects[id].title}</a>
+          <a class="link" href="/projects/{trimName(id)}"
+            >{projects[id].title}</a
+          >
         </li>
       {/each}
     </ul>
@@ -121,12 +123,7 @@
 {#each sortOrder === "date" ? projectsByDate : projectsByStars as id (id)}
   <section class="py-10">
     <div class="mx-auto max-w-[1152px] px-4 sm:px-6">
-      <ProjectTeaser
-        data={projects[id]}
-        slug={slugOf(id)}
-        {images}
-        {stars}
-      />
+      <ProjectTeaser data={projects[id]} slug={slugOf(id)} {images} {stars} />
     </div>
   </section>
 {/each}

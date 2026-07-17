@@ -1,7 +1,9 @@
 ---
 title: Deploying a Next.js/React/Express App on EC2
 date: 2025-10-15
-lead: A comprehensive guide for deploying on an Ubuntu EC2 instance using Nginx and PM2.
+lead:
+  A comprehensive guide for deploying on an Ubuntu EC2 instance using Nginx and
+  PM2.
 ---
 
 This script is written for an Ubuntu EC2 instance.
@@ -37,7 +39,8 @@ npm i
 npm run build
 ```
 
-**3. Configure Nginx as a reverse proxy** (replace `{folder_name}` with your project's name):
+**3. Configure Nginx as a reverse proxy** (replace `{folder_name}` with your
+project's name):
 
 ```nginx
 server {
@@ -68,7 +71,8 @@ npm i -g pm2
 pm2 start npm --name "my-app" -- start
 ```
 
-Make sure your domain's DNS (e.g. AWS Route 53) points to the instance's public IPv4 address before this step.
+Make sure your domain's DNS (e.g. AWS Route 53) points to the instance's public
+IPv4 address before this step.
 
 **5. HTTPS with Certbot:**
 
@@ -80,12 +84,12 @@ sudo certbot --nginx -d your_domain_name
 
 **PM2 commands for other frameworks:**
 
-| Framework | PM2 command |
-| --- | --- |
-| Vite project | `pm2 start npm --name "vite-app" -- run preview` |
-| Next.js server | `pm2 start npm --name "next-app" -- start` |
-| Create React App | `pm2 start "serve -s build -l 3000" --name react-app` |
-| Express.js server | `pm2 start server.js --name "express-api"` |
+| Framework         | PM2 command                                           |
+| ----------------- | ----------------------------------------------------- |
+| Vite project      | `pm2 start npm --name "vite-app" -- run preview`      |
+| Next.js server    | `pm2 start npm --name "next-app" -- start`            |
+| Create React App  | `pm2 start "serve -s build -l 3000" --name react-app` |
+| Express.js server | `pm2 start server.js --name "express-api"`            |
 
 **Redeploying after code changes:**
 

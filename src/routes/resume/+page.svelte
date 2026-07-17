@@ -89,20 +89,19 @@
   >
     <li>
       Scaled backend for <b>100M+ API requests</b> by deploying with
-      <b>Nginx</b> and <b>Redis caching</b> across 4 AWS EC2 t3.large
-      instances.
+      <b>Nginx</b> and <b>Redis caching</b> across 4 AWS EC2 t3.large instances.
     </li>
     <li>
-      Handled <b>80L+ transactions</b> by integrating the PhonePe API, with
-      authentication via JWT and OAuth2 and rate-limited endpoints.
+      Handled <b>80L+ transactions</b> by integrating the PhonePe API, with authentication
+      via JWT and OAuth2 and rate-limited endpoints.
     </li>
     <li>
-      Delivered <b>99.8% OTP/email delivery</b> using MSG91, a mailer, async
-      retry queues, and CloudWatch monitoring.
+      Delivered <b>99.8% OTP/email delivery</b> using MSG91, a mailer, async retry
+      queues, and CloudWatch monitoring.
     </li>
     <li>
-      Shipped a React Native app on the Play Store (1K+ downloads) with
-      backend integration for event access and admin tools.
+      Shipped a React Native app on the Play Store (1K+ downloads) with backend
+      integration for event access and admin tools.
     </li>
   </Workplace>
 
@@ -126,8 +125,8 @@
       WorkManager sync triggered by network connectivity.
     </li>
     <li>
-      Lowered API load by ~10% by caching task history, enabling instant
-      access and reducing backend calls after reconnect.
+      Lowered API load by ~10% by caching task history, enabling instant access
+      and reducing backend calls after reconnect.
     </li>
   </Workplace>
 </section>
@@ -137,12 +136,14 @@
 
   <div class="mb-4">
     <div class="flex justify-between items-end">
-      <h3 class="text-black text-lg">Indian Institute of Technology, Kharagpur</h3>
+      <h3 class="text-black text-lg">
+        Indian Institute of Technology, Kharagpur
+      </h3>
       <div class="text-neutral-500 mb-0.5">2022 - Present</div>
     </div>
     <p class="byline">
-      5-year Dual Degree (B.Tech + M.Tech) in Computer Science and Engineering
-      - CGPA 8.82/10
+      5-year Dual Degree (B.Tech + M.Tech) in Computer Science and Engineering -
+      CGPA 8.82/10
     </p>
   </div>
 
@@ -232,8 +233,8 @@
   <div class="mb-4">
     <h3 class="font-medium mb-1">Tools and Platforms:</h3>
     <p>
-      Docker, Kubernetes, Redis, MongoDB, Postgres, AWS, Azure, Git,
-      Databricks, Linux Kernel, Raspberry Pi
+      Docker, Kubernetes, Redis, MongoDB, Postgres, AWS, Azure, Git, Databricks,
+      Linux Kernel, Raspberry Pi
     </p>
   </div>
 </section>
@@ -269,8 +270,8 @@
       (1.2M candidates), and <b>AIR 83</b> in WBJEE, 2022.
     </li>
     <li>
-      Contributed to the <b>NixOS</b> open-source project, writing patches,
-      refining Nix expressions, and improving system builds.
+      Contributed to the <b>NixOS</b> open-source project, writing patches, refining
+      Nix expressions, and improving system builds.
     </li>
     <li>
       Served as Unit Leader for NSS Unit-4, coordinating activities and
