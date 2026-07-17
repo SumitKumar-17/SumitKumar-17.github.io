@@ -2,6 +2,7 @@
 title: Online Classroom Management System
 date: 2024-04-08
 repo: Software-Engineering-Project-Team-Bob/OCMS_Frontend
+demo: https://ocms-frontend.vercel.app/
 topics: ["React", "Redux", "Node.js", "MongoDB"]
 lead:
   A full-stack platform for teachers and students to manage classes,

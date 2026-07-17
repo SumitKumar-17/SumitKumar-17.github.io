@@ -20,11 +20,6 @@
       desc: "reliable TCP-like flow control built from scratch over UDP",
     },
     {
-      name: "NotebookLM Clone",
-      href: "/projects/notebooklm",
-      desc: "chat-with-your-PDFs app, survivor of JS dependency hell",
-    },
-    {
       name: "Mini RISC Processor",
       href: "/projects/mini-risc-processor",
       desc: "pipelined RISC processor in Verilog, run on an FPGA",

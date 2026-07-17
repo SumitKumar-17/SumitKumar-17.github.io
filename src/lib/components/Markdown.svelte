@@ -38,6 +38,9 @@
           language ?? "plaintext"
         }">${value}</code></pre>`;
       },
+      table(header: string, body: string) {
+        return `<div class="table-wrap"><table><thead>${header}</thead><tbody>${body}</tbody></table></div>`;
+      },
     },
   });
 
@@ -70,5 +73,26 @@
 
   .md-output :global(pre code.hljs) {
     @apply bg-transparent p-0;
+  }
+
+  .md-output :global(.table-wrap) {
+    @apply overflow-x-auto my-4 rounded-md border border-neutral-200;
+  }
+
+  .md-output :global(table) {
+    @apply w-full text-sm border-collapse;
+  }
+
+  .md-output :global(th),
+  .md-output :global(td) {
+    @apply px-3 py-2 border-b border-neutral-200 text-left align-top;
+  }
+
+  .md-output :global(th) {
+    @apply bg-neutral-50 font-semibold text-black whitespace-nowrap;
+  }
+
+  .md-output :global(tr:last-child td) {
+    @apply border-b-0;
   }
 </style>

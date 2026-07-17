@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Star } from "lucide-svelte";
+  import { ExternalLink, Github, Star } from "lucide-svelte";
 
   import Markdown from "$lib/components/Markdown.svelte";
   import { formatTime } from "$lib/utils";
@@ -9,6 +9,7 @@
     date: string;
     content: string;
     repo?: string;
+    demo?: string;
     topics: string[];
     lead: string;
     image?: string;
@@ -39,7 +40,18 @@
   {#if data.repo}
     <a
       class="pill hover:!bg-neutral-200 transition-colors"
+      href="https://github.com/{data.repo}"
+      target="_blank"
+      rel="noreferrer"
+    >
+      <Github size={14} />
+      <span class="ml-1">GitHub</span>
+    </a>
+    <a
+      class="pill hover:!bg-neutral-200 transition-colors"
       href="https://github.com/{data.repo}/stargazers"
+      target="_blank"
+      rel="noreferrer"
     >
       <Star size={14} class="fill-current" />
       {#if stars?.[data.repo] !== undefined}
@@ -47,6 +59,17 @@
       {:else}
         <span>&ZeroWidthSpace;</span>
       {/if}
+    </a>
+  {/if}
+  {#if data.demo}
+    <a
+      class="pill pill-accent hover:!bg-neutral-800 transition-colors"
+      href={data.demo}
+      target="_blank"
+      rel="noreferrer"
+    >
+      <ExternalLink size={14} />
+      <span class="ml-1">Live Demo</span>
     </a>
   {/if}
   {#each data.topics as tag}
@@ -93,5 +116,9 @@
   .pill {
     @apply flex items-center text-sm font-medium;
     @apply px-1.5 py-[1px] mr-1.5 mb-2 bg-neutral-100 rounded-full;
+  }
+
+  .pill-accent {
+    @apply bg-black text-white;
   }
 </style>

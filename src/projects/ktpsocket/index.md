@@ -2,6 +2,7 @@
 title: KTPSocket
 date: 2025-03-30
 repo: SumitKumar-17/CS39006_Networks_Lab
+demo: https://k-socket-graphs.vercel.app/
 topics: ["Networking", "C", "UDP", "Visualization"]
 lead:
   A reliable, TCP-like flow control protocol built from scratch over raw UDP.
