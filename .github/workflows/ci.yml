@@ -6,7 +6,7 @@ on:
       - master
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -20,6 +20,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Needed so the auto-format commit step below can push back.
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/setup-node@v4
         with:
@@ -28,9 +31,22 @@ jobs:
 
       - run: npm ci
 
-      - run: npm run check
+      # Auto-fix formatting instead of failing the build over it. If this
+      # changes anything, commit the fix back to master (marked [skip ci] so
+      # it doesn't recursively re-trigger this workflow) so the repo itself
+      # stays clean, not just this one build's output.
+      - run: npm run format
 
-      - run: npm run lint
+      - name: Commit auto-formatted files (if any)
+        run: |
+          if ! git diff --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git commit -am "chore: auto-format [skip ci]"
+            git push
+          fi
+
+      - run: npm run check
 
       - run: npm run build
 
