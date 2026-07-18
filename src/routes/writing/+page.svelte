@@ -13,7 +13,8 @@
   }
 
   const postsByDate = Object.keys(posts).sort(
-    (a, b) => posts[b].date - posts[a].date
+    (a, b) =>
+      new Date(posts[b].date).getTime() - new Date(posts[a].date).getTime()
   );
 </script>
 

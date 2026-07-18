@@ -30,7 +30,9 @@
   }
 
   $: projectsByDate = Object.keys(projects).sort(
-    (a, b) => projects[b].date - projects[a].date
+    (a, b) =>
+      new Date(projects[b].date).getTime() -
+      new Date(projects[a].date).getTime()
   );
   $: projectsByTitle = Object.keys(projects).sort((a, b) => {
     const titleA = projects[a].title.toLowerCase();
