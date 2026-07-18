@@ -15,7 +15,7 @@
     "@fontsource/newsreader": "^4.5.10",
     "@vercel/analytics": "^2.0.1",
     "highlight.js": "^11.11.1",
-    "lucide-svelte": "^0.130.0",
+    "lucide-svelte": "^1.0.1",
     "marked": "^4.3.0",
     "strftime": "^0.10.1",
     "svelte": "^3.58.0"
