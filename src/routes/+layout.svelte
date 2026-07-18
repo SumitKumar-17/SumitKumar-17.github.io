@@ -2,9 +2,12 @@
   import "@fontsource/newsreader/400-italic.css";
   import "../app.css";
 
-  import { browser } from "$app/environment";
+  import { browser, dev } from "$app/environment";
+  import { injectAnalytics } from "@vercel/analytics/sveltekit";
 
   import { fly } from "svelte/transition";
+
+  injectAnalytics({ mode: dev ? "development" : "production" });
 
   import Header from "$lib/components/Header.svelte";
   import Footer from "$lib/components/Footer.svelte";

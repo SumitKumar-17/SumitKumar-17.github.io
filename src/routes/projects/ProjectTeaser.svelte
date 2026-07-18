@@ -45,7 +45,7 @@
     class="absolute inset-0 z-0"
     href="/projects/{slug}"
     aria-label={data.title}
-  />
+  ></a>
 
   <h3 class="text-black text-xl font-semibold mb-2">
     <span class="mr-1">{data.title}</span>

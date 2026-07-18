@@ -1,3 +1,5 @@
+<script lang="ts"></script>
+
 <footer class="layout-md mt-20 text-lg flex flex-col">
   <div class="row">
     <span>Twitter</span>
