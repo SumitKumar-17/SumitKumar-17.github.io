@@ -12,8 +12,6 @@
     topics: string[];
     lead: string;
     image?: string;
-    image_border?: boolean;
-    image_rounded?: boolean;
   };
 
   export let data: ProjectMeta;
@@ -106,8 +104,7 @@
         <img
           src={images[data.image]}
           alt="{data.title} preview image"
-          class:border={data.image_border}
-          class:rounded-md={data.image_rounded}
+          class="thumb"
         />
       </div>
     {/if}
@@ -126,6 +123,10 @@
 
   .pill-accent {
     @apply bg-black text-white;
+  }
+
+  .thumb {
+    @apply w-full rounded-md border border-neutral-200;
   }
 
   .read-more {

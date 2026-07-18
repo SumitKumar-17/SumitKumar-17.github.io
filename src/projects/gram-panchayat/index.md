@@ -7,7 +7,6 @@ lead:
   A multi-user web app for managing Gram Panchayat administration, built for a
   DBMS course.
 image: gram-panchayat.png
-image_border: true
 ---
 
 Every Database Management Systems Laboratory needs a mid-term group project, and

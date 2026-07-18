@@ -56,7 +56,7 @@
 
 <style lang="postcss">
   .md-output :global(p) {
-    @apply mb-4;
+    @apply mb-4 leading-relaxed;
   }
 
   .md-output :global(strong) {
@@ -65,6 +65,56 @@
 
   .md-output :global(code) {
     @apply text-[95%];
+  }
+
+  .md-output :global(h1),
+  .md-output :global(h2) {
+    @apply text-black text-xl font-semibold mt-10 mb-3;
+  }
+
+  .md-output :global(h3) {
+    @apply text-black text-lg font-semibold mt-8 mb-2;
+  }
+
+  .md-output :global(h4) {
+    @apply text-black text-base font-semibold mt-6 mb-2;
+  }
+
+  .md-output :global(ul),
+  .md-output :global(ol) {
+    @apply mb-4 pl-6;
+  }
+
+  .md-output :global(ul) {
+    @apply list-disc;
+  }
+
+  .md-output :global(ol) {
+    @apply list-decimal;
+  }
+
+  .md-output :global(li) {
+    @apply mb-1.5 leading-relaxed;
+  }
+
+  .md-output :global(li p) {
+    @apply mb-1;
+  }
+
+  .md-output :global(blockquote) {
+    @apply border-l-2 border-neutral-300 pl-4 my-4 italic text-neutral-600;
+  }
+
+  .md-output :global(blockquote p) {
+    @apply mb-0;
+  }
+
+  .md-output :global(hr) {
+    @apply my-8 border-neutral-200;
+  }
+
+  .md-output :global(img) {
+    @apply rounded-md my-4;
   }
 
   .md-output :global(pre) {

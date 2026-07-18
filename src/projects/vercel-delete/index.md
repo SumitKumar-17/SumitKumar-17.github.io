@@ -7,7 +7,6 @@ lead:
   A CLI tool to bulk-delete Vercel projects interactively, since Vercel's own
   CLI won't let you.
 image: vercel-delete.png
-image_border: true
 ---
 
 If you've ever spun up a Vercel project for every throwaway demo, side project,

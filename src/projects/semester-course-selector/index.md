@@ -8,7 +8,6 @@ lead:
   A local, no-login tool for picking electives and a TA course without
   double-booking your own timetable.
 image: course-selector.png
-image_border: true
 ---
 
 Every semester at IIT Kharagpur comes with the same ritual: pick a handful of

@@ -6,7 +6,6 @@ topics: ["Go", "CLI"]
 lead:
   A CLI tool that scans a directory and writes out its structure as Markdown.
 image: dirscanner.png
-image_border: true
 ---
 
 I was writing up documentation for a project and wanted a clean Markdown view of

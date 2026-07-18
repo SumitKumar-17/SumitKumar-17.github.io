@@ -13,8 +13,6 @@
     topics: string[];
     lead: string;
     image?: string;
-    image_border?: boolean;
-    image_rounded?: boolean;
     subimages?: string[];
   };
 
@@ -78,34 +76,33 @@
 </div>
 
 <!-- Single image: full-width hero above the writeup, so the text column -->
-<!-- never gets squeezed into a narrow side rail. -->
+<!-- never gets squeezed into a narrow side rail. Always rounded/bordered -->
+<!-- with a soft shadow, so every project looks polished automatically. -->
 {#if allImages.length === 1}
-  <a rel="external" href={images[allImages[0]]} class="block mb-4">
-    <img
-      src={images[allImages[0]]}
-      alt="{data.title} preview image"
-      class="w-full"
-      class:border={data.image_border}
-      class:rounded-md={data.image_rounded}
-    />
+  <a rel="external" href={images[allImages[0]]} target="_blank" class="hero">
+    <img src={images[allImages[0]]} alt="{data.title} preview image" />
   </a>
 {/if}
 
-<div class="space-y-4">
-  <p class="text-lg font-light mb-3">{data.lead}</p>
+<div class="space-y-5">
+  <p class="text-lg font-light">{data.lead}</p>
   <Markdown source={data.content} />
 
   <!-- Multiple images: a gallery grid below the writeup instead of one -->
   <!-- thumbnail wedged next to the text and the rest scattered underneath. -->
+  <!-- auto-fit + a fixed aspect ratio means the row always fills cleanly, no -->
+  <!-- matter the image count — no orphaned tile stretched alone in its own -->
+  <!-- half-empty row, and no jagged heights from mismatched screenshots. -->
   {#if allImages.length > 1}
-    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-6">
+    <div class="gallery mt-6">
       {#each allImages as image}
-        <a rel="external" href={images[image]}>
-          <img
-            src={images[image]}
-            alt="{data.title} preview image"
-            class="w-full"
-          />
+        <a
+          rel="external"
+          href={images[image]}
+          target="_blank"
+          class="gallery-item"
+        >
+          <img src={images[image]} alt="{data.title} preview image" />
         </a>
       {/each}
     </div>
@@ -120,5 +117,32 @@
 
   .pill-accent {
     @apply bg-black text-white;
+  }
+
+  .hero {
+    @apply block mb-6 rounded-md overflow-hidden border border-neutral-200;
+    @apply shadow-sm hover:shadow-md transition-shadow;
+  }
+
+  .hero img {
+    @apply w-full;
+  }
+
+  .gallery {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+
+  .gallery-item {
+    @apply block aspect-[2/1] overflow-hidden rounded-md border border-neutral-200;
+  }
+
+  .gallery-item img {
+    @apply w-full h-full object-cover transition-transform duration-200;
+  }
+
+  .gallery-item:hover img {
+    @apply scale-105;
   }
 </style>

@@ -7,7 +7,6 @@ lead:
   A custom relational database engine with its own SQL parser and query
   executor.
 image: keystonedb.png
-image_border: true
 ---
 
 > "Let's build a database engine."

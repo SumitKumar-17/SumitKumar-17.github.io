@@ -99,7 +99,7 @@
       <a class="link" href="https://qficapital.in/">QFI Capital</a>, and
       <a class="link" href="https://autonmis.com/">Autonmis</a>, and currently
       work as a developer at
-      <a class="link" href="https://stepsai.ca/">StepsAI</a>.
+      <a class="link" href="https://stepsai.co/">StepsAI</a>.
     </p>
 
     <p>
@@ -115,10 +115,19 @@
     <p>
       I also spend time contributing to open source - patches to <a
         class="link"
-        href="https://supabase.com/">Supabase</a
+        href="https://github.com/search?q=org%3Asupabase+author%3ASumitKumar-17&type=pullrequests"
+        >Supabase</a
       >,
-      <a class="link" href="https://github.com/stripe">Stripe</a>, and
-      <a class="link" href="https://nixos.org/">NixOS</a>, among other things.
+      <a
+        class="link"
+        href="https://github.com/search?q=org%3Astripe+author%3ASumitKumar-17&type=pullrequests"
+        >Stripe</a
+      >, and
+      <a
+        class="link"
+        href="https://github.com/search?q=org%3ANixOS+author%3ASumitKumar-17&type=pullrequests"
+        >NixOS</a
+      >, among other things.
     </p>
 
     <p>
