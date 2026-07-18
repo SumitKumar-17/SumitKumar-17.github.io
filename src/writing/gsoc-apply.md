@@ -1,6 +1,7 @@
 ---
 title: GSoC Application
 date: 2025-04-28
+topic: Technology
 lead:
   My GSoC 2025 applications to Postgres, LLVM, and libssh - and how they turned
   out.

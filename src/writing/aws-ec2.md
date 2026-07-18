@@ -1,6 +1,7 @@
 ---
 title: Deploying a Next.js/React/Express App on EC2
 date: 2025-10-15
+topic: Technology
 lead:
   A comprehensive guide for deploying on an Ubuntu EC2 instance using Nginx and
   PM2.

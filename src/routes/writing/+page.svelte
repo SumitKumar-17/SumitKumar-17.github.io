@@ -1,50 +1,60 @@
 <script lang="ts">
-  import { ArrowUpRight } from "lucide-svelte";
-
   import Seo from "$lib/components/Seo.svelte";
-  import { formatTime } from "$lib/utils";
+  import AcademicWritingSection from "./AcademicWritingSection.svelte";
+  import BlogSection from "./BlogSection.svelte";
 
-  const posts = import.meta.glob("../../writing/*.md", {
+  const rawPosts = import.meta.glob("../../writing/*.md", {
     eager: true,
-  }) as any;
+  }) as Record<string, any>;
 
-  function trimName(id: string) {
-    return id.match(/\.\.\/\.\.\/writing\/(.*)\.md$/)?.[1];
+  function slugOf(id: string): string {
+    return id.match(/\.\.\/\.\.\/writing\/(.*)\.md$/)?.[1] as string;
   }
 
-  const postsByDate = Object.keys(posts).sort(
-    (a, b) =>
-      new Date(posts[b].date).getTime() - new Date(posts[a].date).getTime()
-  );
+  const postsByDate = Object.entries(rawPosts)
+    .map(([id, data]) => ({ slug: slugOf(id), data }))
+    .sort(
+      (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+    );
+
+  // Group posts by their frontmatter `topic` into ordered sections. Topics
+  // are ordered by when they first appear in date-sorted order, so the
+  // busiest/most-recent topic naturally leads. Adding a new topic is just a
+  // matter of tagging posts with it — no code change needed here.
+  const topicOrder: string[] = [];
+  const postsByTopic: Record<string, typeof postsByDate> = {};
+  for (const post of postsByDate) {
+    const topic = post.data.topic ?? "Technology";
+    if (!postsByTopic[topic]) {
+      topicOrder.push(topic);
+      postsByTopic[topic] = [];
+    }
+    postsByTopic[topic].push(post);
+  }
+
+  const rawAcademicWriting = import.meta.glob("../../academic-writing/*.md", {
+    eager: true,
+  }) as Record<string, any>;
+
+  function academicSlugOf(id: string): string {
+    return id.match(/\.\.\/\.\.\/academic-writing\/(.*)\.md$/)?.[1] as string;
+  }
+
+  const academicWriting = Object.entries(rawAcademicWriting)
+    .map(([id, data]) => ({ slug: academicSlugOf(id), data }))
+    .sort(
+      (a, b) =>
+        new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+    );
 </script>
 
 <Seo
   title="Sumit Kumar – Writing"
-  description="Notes, tutorials, and technical writing on databases, deployment, and everything else I get nerd-sniped by."
+  description="Notes, tutorials, and academic writing on databases, deployment, and everything else I get nerd-sniped by."
 />
 
-<section class="layout-md py-12">
-  <h2 class="heading2">Writing</h2>
+{#each topicOrder as topic}
+  <BlogSection title={topic} posts={postsByTopic[topic]} />
+{/each}
 
-  <div class="grid gap-y-4">
-    {#each postsByDate as id (id)}
-      <a
-        href="/writing/{trimName(id)}"
-        class="block -mx-3 px-3 py-2 hover:bg-neutral-100 transition-colors"
-      >
-        <div class="flex flex-col sm:flex-row sm:items-end mb-1.5">
-          <div class="text-lg text-black">
-            {posts[id].title}
-            <ArrowUpRight size={18} class="inline text-neutral-400" />
-          </div>
-          <div class="sm:ml-auto mb-0.5 text-neutral-500">
-            {formatTime("%B %-d, %Y", posts[id].date)}
-          </div>
-        </div>
-        <div class="text-lg leading-snug font-serif italic">
-          {posts[id].lead}
-        </div>
-      </a>
-    {/each}
-  </div>
-</section>
+<AcademicWritingSection title="Academic Writing" entries={academicWriting} />

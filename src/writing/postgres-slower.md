@@ -1,6 +1,7 @@
 ---
 title: "Deconstructing a Masterclass: Postgres 42,000x Slower"
 date: 2025-08-04
+topic: Technology
 lead:
   A breakdown of a brilliant and hilarious article on negative performance
   tuning in PostgreSQL.
