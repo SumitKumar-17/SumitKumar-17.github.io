@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { marked } from "marked";
+  import { marked, type Tokens } from "marked";
   import hljs from "highlight.js/lib/core";
   import bash from "highlight.js/lib/languages/bash";
   import c from "highlight.js/lib/languages/c";
@@ -15,9 +15,12 @@
   hljs.registerLanguage("nginx", nginx);
   hljs.registerLanguage("sql", sql);
 
+  // Plain object, not a class: marked's `use()` merges renderer overrides via
+  // `for...in`, which only sees enumerable properties. ES6 class methods are
+  // non-enumerable, so a class-based renderer here would silently no-op.
   marked.use({
     renderer: {
-      link(href: string, title: string | null, text: string) {
+      link({ href, title, text }: Tokens.Link) {
         let out = `<a rel="external" href="${encodeURI(href)}" class="link"`;
         if (title) {
           out += ' title="' + title + '"';
@@ -25,29 +28,25 @@
         out += ">" + text + "</a>";
         return out;
       },
-      code(code: string, infostring: string | undefined) {
-        const lang = (infostring || "").trim().split(/\s+/)[0];
-        const { value, language } =
-          lang && hljs.getLanguage(lang)
-            ? {
-                value: hljs.highlight(code, { language: lang }).value,
-                language: lang,
-              }
-            : hljs.highlightAuto(code);
+      code({ text, lang }: Tokens.Code) {
+        const language = (lang || "").trim().split(/\s+/)[0];
+        const { value, language: resolved } =
+          language && hljs.getLanguage(language)
+            ? { value: hljs.highlight(text, { language }).value, language }
+            : hljs.highlightAuto(text);
         return `<pre><code class="hljs language-${
-          language ?? "plaintext"
+          resolved ?? "plaintext"
         }">${value}</code></pre>`;
-      },
-      table(header: string, body: string) {
-        return `<div class="table-wrap"><table><thead>${header}</thead><tbody>${body}</tbody></table></div>`;
       },
     },
   });
 
-  $: html = marked.parse(source, {
-    smartLists: true,
-    smartypants: true,
-  });
+  // Wrapping <table> in a scrollable container isn't worth fighting marked's
+  // renderer-merge quirks over — a simple post-process is more robust here.
+  $: html = (marked.parse(source) as string).replace(
+    /<table>[\s\S]*?<\/table>/g,
+    (match) => `<div class="table-wrap">${match}</div>`
+  );
 </script>
 
 <div class="md-output">

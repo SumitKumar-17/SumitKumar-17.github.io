@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { ArrowUpRight, ExternalLink, Github, Star } from "lucide-svelte";
+  import { ArrowUpRight, ExternalLink, Star } from "lucide-svelte";
 
+  import GithubIcon from "$lib/components/GithubIcon.svelte";
   import { formatTime } from "$lib/utils";
 
   type ProjectMeta = {
@@ -62,7 +63,7 @@
         target="_blank"
         rel="noreferrer"
       >
-        <Github size={14} />
+        <GithubIcon size={14} />
         <span class="ml-1">GitHub</span>
       </a>
       <span class="pill">

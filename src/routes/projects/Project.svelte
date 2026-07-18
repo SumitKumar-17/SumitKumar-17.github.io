@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { ExternalLink, Github, Star } from "lucide-svelte";
+  import { ExternalLink, Star } from "lucide-svelte";
 
+  import GithubIcon from "$lib/components/GithubIcon.svelte";
   import Markdown from "$lib/components/Markdown.svelte";
   import { formatTime } from "$lib/utils";
 
@@ -42,7 +43,7 @@
       target="_blank"
       rel="noreferrer"
     >
-      <Github size={14} />
+      <GithubIcon size={14} />
       <span class="ml-1">GitHub</span>
     </a>
     <a

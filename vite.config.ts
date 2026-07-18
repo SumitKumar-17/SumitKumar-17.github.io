@@ -1,6 +1,5 @@
 import { sveltekit } from "@sveltejs/kit/vite";
-import pluginYaml from "@rollup/plugin-yaml";
-import yaml from "js-yaml";
+import { load } from "js-yaml";
 import { dataToEsm } from "@rollup/pluginutils";
 import type { UserConfig } from "vite";
 
@@ -18,7 +17,7 @@ function markdown() {
           if (end === -1) {
             throw new Error(`Unclosed TOML frontmatter in ${id}`);
           }
-          frontmatter = yaml.load(src.substring(3, end).trim()) as any;
+          frontmatter = load(src.substring(3, end).trim()) as any;
           content = src.substring(end + 3).trim();
         }
         return {
@@ -31,7 +30,7 @@ function markdown() {
 }
 
 const config: UserConfig = {
-  plugins: [sveltekit(), pluginYaml() as any, markdown()],
+  plugins: [sveltekit(), markdown()],
 };
 
 export default config;
