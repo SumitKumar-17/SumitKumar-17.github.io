@@ -12,7 +12,7 @@
     "format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. ."
   },
   "dependencies": {
-    "@fontsource/newsreader": "^4.5.10",
+    "@fontsource/newsreader": "^5.2.10",
     "@vercel/analytics": "^2.0.1",
     "highlight.js": "^11.11.1",
     "lucide-svelte": "^0.130.0",
