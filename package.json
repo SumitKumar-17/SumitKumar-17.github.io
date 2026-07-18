@@ -16,7 +16,7 @@
     "@vercel/analytics": "^2.0.1",
     "highlight.js": "^11.11.1",
     "lucide-svelte": "^0.130.0",
-    "marked": "^4.3.0",
+    "marked": "^18.0.6",
     "strftime": "^0.10.1",
     "svelte": "^3.58.0"
   },
