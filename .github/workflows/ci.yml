@@ -19,7 +19,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           # Needed so the auto-format commit step below can push back.
           token: ${{ secrets.GITHUB_TOKEN }}
