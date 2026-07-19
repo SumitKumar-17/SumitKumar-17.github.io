@@ -6,7 +6,7 @@ const allPosts = import.meta.glob("../../../writing/*.md", {
   eager: true,
 }) as any;
 const posts = Object.fromEntries(
-  Object.entries(allPosts).filter(([, data]) => isVisible(data as any))
+  Object.entries(allPosts).filter(([, data]) => isVisible(data as any)),
 ) as any;
 
 function trimName(id: string) {

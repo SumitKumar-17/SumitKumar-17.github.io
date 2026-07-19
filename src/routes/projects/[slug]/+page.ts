@@ -6,7 +6,7 @@ const allProjects = import.meta.glob("../../../projects/*/index.md", {
   eager: true,
 }) as any;
 const projects = Object.fromEntries(
-  Object.entries(allProjects).filter(([, data]) => isVisible(data as any))
+  Object.entries(allProjects).filter(([, data]) => isVisible(data as any)),
 ) as any;
 
 function trimName(id: string) {

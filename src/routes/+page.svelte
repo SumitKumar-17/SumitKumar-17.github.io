@@ -97,9 +97,7 @@
         >Atlassian</a
       >, <a class="link" href="https://paralleldots.com/">ParallelDots</a>,
       <a class="link" href="https://qficapital.in/">QFI Capital</a>, and
-      <a class="link" href="https://autonmis.com/">Autonmis</a>, and currently
-      work as a developer at
-      <a class="link" href="https://stepsai.co/">StepsAI</a>.
+      <a class="link" href="https://autonmis.com/">Autonmis</a>.
     </p>
 
     <p>

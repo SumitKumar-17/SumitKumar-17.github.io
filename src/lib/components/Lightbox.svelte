@@ -47,7 +47,9 @@
     role="dialog"
     aria-modal="true"
     aria-label={images[activeIndex].alt}
+    tabindex="-1"
     on:click={close}
+    on:keydown={onKeydown}
   >
     <button
       bind:this={closeButton}
@@ -68,12 +70,13 @@
       </button>
     {/if}
 
-    <img
-      class="lightbox-image"
-      src={images[activeIndex].src}
-      alt={images[activeIndex].alt}
-      on:click|stopPropagation
-    />
+    <div class="image-frame" role="presentation" on:click|stopPropagation>
+      <img
+        class="lightbox-image"
+        src={images[activeIndex].src}
+        alt={images[activeIndex].alt}
+      />
+    </div>
 
     {#if images.length > 1}
       <button
@@ -93,6 +96,10 @@
     @apply fixed inset-0 z-50 flex items-center justify-center;
     @apply bg-black/90 p-6 sm:p-10;
     animation: fade-in 150ms ease-out;
+  }
+
+  .image-frame {
+    display: contents;
   }
 
   .lightbox-image {
