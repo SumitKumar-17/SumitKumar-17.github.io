@@ -1,7 +1,13 @@
 import { error } from "@sveltejs/kit";
+import { isVisible } from "$lib/utils";
 import type { EntryGenerator, PageLoad } from "./$types";
 
-const posts = import.meta.glob("../../../writing/*.md", { eager: true }) as any;
+const allPosts = import.meta.glob("../../../writing/*.md", {
+  eager: true,
+}) as any;
+const posts = Object.fromEntries(
+  Object.entries(allPosts).filter(([, data]) => isVisible(data as any))
+) as any;
 
 function trimName(id: string) {
   return id.match(/\.\.\/\.\.\/\.\.\/writing\/(.*)\.md$/)?.[1];

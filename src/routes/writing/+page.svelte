@@ -1,5 +1,6 @@
 <script lang="ts">
   import Seo from "$lib/components/Seo.svelte";
+  import { isVisible } from "$lib/utils";
   import AcademicWritingSection from "./AcademicWritingSection.svelte";
   import BlogSection from "./BlogSection.svelte";
 
@@ -12,6 +13,7 @@
   }
 
   const postsByDate = Object.entries(rawPosts)
+    .filter(([, data]) => isVisible(data))
     .map(([id, data]) => ({ slug: slugOf(id), data }))
     .sort(
       (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
@@ -41,6 +43,7 @@
   }
 
   const academicWriting = Object.entries(rawAcademicWriting)
+    .filter(([, data]) => isVisible(data))
     .map(([id, data]) => ({ slug: academicSlugOf(id), data }))
     .sort(
       (a, b) =>

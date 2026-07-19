@@ -2,6 +2,7 @@
   import { ExternalLink, Star } from "lucide-svelte";
 
   import GithubIcon from "$lib/components/GithubIcon.svelte";
+  import Lightbox from "$lib/components/Lightbox.svelte";
   import Markdown from "$lib/components/Markdown.svelte";
   import { formatTime } from "$lib/utils";
 
@@ -24,6 +25,12 @@
   $: allImages = [data.image, ...(data.subimages ?? [])].filter(
     (name): name is string => Boolean(name)
   );
+  $: lightboxImages = allImages.map((name) => ({
+    src: images[name],
+    alt: `${data.title} preview image`,
+  }));
+
+  let lightbox: Lightbox;
 </script>
 
 <!-- Title -->
@@ -79,10 +86,11 @@
 <!-- Single image: full-width hero above the writeup, so the text column -->
 <!-- never gets squeezed into a narrow side rail. Always rounded/bordered -->
 <!-- with a soft shadow, so every project looks polished automatically. -->
+<!-- Opens in the in-page Lightbox instead of navigating to the raw file. -->
 {#if allImages.length === 1}
-  <a rel="external" href={images[allImages[0]]} target="_blank" class="hero">
+  <button type="button" class="hero" on:click={() => lightbox.open(0)}>
     <img src={images[allImages[0]]} alt="{data.title} preview image" />
-  </a>
+  </button>
 {/if}
 
 <div class="space-y-5">
@@ -96,19 +104,20 @@
   <!-- half-empty row, and no jagged heights from mismatched screenshots. -->
   {#if allImages.length > 1}
     <div class="gallery mt-6">
-      {#each allImages as image}
-        <a
-          rel="external"
-          href={images[image]}
-          target="_blank"
+      {#each allImages as image, i}
+        <button
+          type="button"
           class="gallery-item"
+          on:click={() => lightbox.open(i)}
         >
           <img src={images[image]} alt="{data.title} preview image" />
-        </a>
+        </button>
       {/each}
     </div>
   {/if}
 </div>
+
+<Lightbox bind:this={lightbox} images={lightboxImages} />
 
 <style lang="postcss">
   .pill {
@@ -121,8 +130,9 @@
   }
 
   .hero {
-    @apply block mb-6 rounded-md overflow-hidden border border-neutral-200;
+    @apply block w-full mb-6 rounded-md overflow-hidden border border-neutral-200;
     @apply shadow-sm hover:shadow-md transition-shadow;
+    @apply p-0 bg-transparent cursor-pointer text-left;
   }
 
   .hero img {
@@ -137,6 +147,7 @@
 
   .gallery-item {
     @apply block aspect-[2/1] overflow-hidden rounded-md border border-neutral-200;
+    @apply p-0 bg-transparent cursor-pointer text-left w-full;
   }
 
   .gallery-item img {

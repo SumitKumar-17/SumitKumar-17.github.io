@@ -3,11 +3,15 @@
   import { CalendarDays, Star } from "lucide-svelte";
 
   import Seo from "$lib/components/Seo.svelte";
+  import { isVisible } from "$lib/utils";
   import ProjectTeaser from "./ProjectTeaser.svelte";
 
-  const projects = import.meta.glob("../../projects/*/index.md", {
+  const allProjects = import.meta.glob("../../projects/*/index.md", {
     eager: true,
   }) as any;
+  const projects = Object.fromEntries(
+    Object.entries(allProjects).filter(([, data]) => isVisible(data as any))
+  ) as any;
   const rawImages = import.meta.glob("../../projects/*/*.{png,jpg,svg}", {
     eager: true,
   }) as Record<string, { default: string }>;

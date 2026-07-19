@@ -1,9 +1,13 @@
 import { error } from "@sveltejs/kit";
+import { isVisible } from "$lib/utils";
 import type { EntryGenerator, PageLoad } from "./$types";
 
-const projects = import.meta.glob("../../../projects/*/index.md", {
+const allProjects = import.meta.glob("../../../projects/*/index.md", {
   eager: true,
 }) as any;
+const projects = Object.fromEntries(
+  Object.entries(allProjects).filter(([, data]) => isVisible(data as any))
+) as any;
 
 function trimName(id: string) {
   return id.match(/\.\.\/\.\.\/\.\.\/projects\/(.*)\/index\.md$/)?.[1];
