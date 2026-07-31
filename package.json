@@ -19,7 +19,7 @@
     "lucide-svelte": "^1.0.1",
     "marked": "^18.0.6",
     "strftime": "^0.10.3",
-    "svelte": "^5.56.6"
+    "svelte": "^5.56.8"
   },
   "devDependencies": {
     "@rollup/pluginutils": "^5.4.0",
