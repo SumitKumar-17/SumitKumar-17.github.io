@@ -81,9 +81,64 @@
   <h2 class="heading2">Experience</h2>
 
   <Workplace
+    title="Software Engineer Intern"
+    company="Atlassian"
+    url="https://www.atlassian.com/"
+    dates="May 2026 – July 2026"
+    location="Bengaluru, India"
+  >
+    <li>
+      Shipped <b>Bulk Archive</b> and <b>Bulk Delete Teams</b> across all Atlassian
+      orgs via <b>GraphQL mutation APIs</b> and custom frontend dialogs.
+    </li>
+    <li>
+      Replaced a 3-4s manual deletion flow with a single API call using
+      hierarchical async deletion built on <b>AWS SQS</b> and <b>DynamoDB</b>.
+    </li>
+    <li>
+      Proposed a fix for notification spam in the Bulk Archive/Delete flows and
+      validated it via <b>Splunk</b> logs across staging and production.
+    </li>
+    <li>
+      Instrumented API latency, failure, and counter metrics with
+      <b>SignalFx</b> dashboards and <b>Terraform</b>-managed alert rules.
+    </li>
+  </Workplace>
+
+  <Workplace
+    title="Backend Engineer Intern"
+    company="Steps AI"
+    url="https://stepsai.co/"
+    dates="June 2025 – Present"
+    location="Remote"
+  >
+    <li>
+      Engineered async Python microservices with <b>FastAPI</b> and
+      <b>Pydantic</b>, serving agent, copilot, voice, and FAQ APIs.
+    </li>
+    <li>
+      Orchestrated <b>LangGraph</b> and <b>LangChain</b> agents with streaming,
+      checkpointing, and <b>Milvus</b>/<b>Cohere</b>-backed retrieval.
+    </li>
+    <li>
+      Built a DAG-based workflow platform on <b>PostgreSQL</b>/<b>Redis</b>
+      with retries, conditional steps, and connector actions.
+    </li>
+    <li>
+      Automated Shopify/WooCommerce product sync and embedding ingestion via
+      <b>Temporal</b> workflows across <b>S3</b> and <b>Milvus</b>.
+    </li>
+    <li>
+      Deployed services with <b>Docker</b> and <b>ArgoCD</b> GitOps pipelines,
+      adding <b>Sentry</b>/<b>OpenTelemetry</b> tracing and secure OAuth token
+      refresh.
+    </li>
+  </Workplace>
+
+  <Workplace
     title="System Architecture and Platform Design"
     company="Spring Fest, IIT Kharagpur"
-    url="https://springfest.iitkgp.ac.in/"
+    url="https://www.instagram.com/iitkgp.springfest/?hl=en"
     dates="July 2024 – April 2025"
     location="Kharagpur, India"
   >
