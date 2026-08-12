@@ -89,7 +89,13 @@
   >
     <li>
       Shipped <b>Bulk Archive</b> and <b>Bulk Delete Teams</b> across all Atlassian
-      orgs via <b>GraphQL mutation APIs</b> and custom frontend dialogs.
+      orgs via
+      <a
+        class="link"
+        href="https://developer.atlassian.com/platform/teams/graphql/#mutations_bulkDeleteTeams"
+        target="_blank"
+        rel="noreferrer">GraphQL mutation APIs</a
+      > and custom frontend dialogs.      
     </li>
     <li>
       Replaced a 3-4s manual deletion flow with a single API call using
@@ -148,10 +154,10 @@
       trading engine.
     </li>
     <li>
-      Implemented the <b>Bajaj Broking</b> client from scratch — order
-      placement, modification, holdings, and positions via their BridgeLink
-      REST API — extending the platform's broker abstraction alongside
-      <b>Kite Connect</b> and <b>Nubra</b>.
+      Implemented the <b>Bajaj Broking</b> client from scratch, covering
+      order placement, modification, holdings, and positions via their
+      BridgeLink REST API, and extended the platform's broker abstraction
+      alongside <b>Kite Connect</b> and <b>Nubra</b>.
     </li>
     <li>
       Built options-analytics screens computing per-strike Greeks (delta,
