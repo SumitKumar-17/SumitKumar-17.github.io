@@ -135,6 +135,7 @@
 {/each}
 
 <style lang="postcss">
+  @reference "../../app.css";
   button {
     @apply flex items-center text-neutral-400 transition-colors hover:text-black;
   }

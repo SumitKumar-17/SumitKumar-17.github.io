@@ -113,6 +113,7 @@
 </div>
 
 <style lang="postcss">
+  @reference "../../app.css";
   .teaser {
     @apply block -mx-3 px-3 py-2 hover:bg-neutral-100 transition-colors;
   }

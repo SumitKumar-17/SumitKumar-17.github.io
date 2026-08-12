@@ -120,6 +120,7 @@
 <Lightbox bind:this={lightbox} images={lightboxImages} />
 
 <style lang="postcss">
+  @reference "../../app.css";
   .pill {
     @apply flex items-center text-sm font-medium;
     @apply px-1.5 py-[1px] mr-1.5 mb-2 bg-neutral-100 rounded-full;

@@ -148,6 +148,7 @@
 </div>
 
 <style lang="postcss">
+  @reference "../app.css";
   .g {
     @apply text-neutral-400;
   }

@@ -92,6 +92,7 @@
 {/if}
 
 <style lang="postcss">
+  @reference "../../app.css";
   .backdrop {
     @apply fixed inset-0 z-50 flex items-center justify-center;
     @apply bg-black/90 p-6 sm:p-10;

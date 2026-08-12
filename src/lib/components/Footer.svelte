@@ -28,6 +28,7 @@
 </footer>
 
 <style lang="postcss">
+  @reference "../../app.css";
   .row {
     @apply flex items-center space-x-4;
   }

@@ -1,4 +1,5 @@
 import { sveltekit } from "@sveltejs/kit/vite";
+import tailwindcss from "@tailwindcss/vite";
 import { load } from "js-yaml";
 import { dataToEsm } from "@rollup/pluginutils";
 import type { UserConfig } from "vite";
@@ -30,7 +31,7 @@ function markdown() {
 }
 
 const config: UserConfig = {
-  plugins: [sveltekit(), markdown()],
+  plugins: [tailwindcss(), sveltekit(), markdown()],
 };
 
 export default config;

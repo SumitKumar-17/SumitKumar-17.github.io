@@ -5,8 +5,9 @@
 
   const links = [
     { name: "projects", href: "/projects" },
-    { name: "writing", href: "/writing" },
     { name: "resume", href: "/resume" },
+    { name: "writing", href: "/writing" },
+    { name: "gallery", href: "/gallery" },
   ];
 
   function isActive(href: string, pathname: string) {
@@ -52,6 +53,7 @@
 </header>
 
 <style lang="postcss">
+  @reference "../../app.css";
   nav {
     @apply flex items-start text-neutral-500 justify-end space-x-6 text-lg py-0.5;
   }

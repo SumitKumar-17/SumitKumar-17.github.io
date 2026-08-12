@@ -136,6 +136,37 @@
   </Workplace>
 
   <Workplace
+    title="Software Engineer Intern"
+    company="QFI Research Capital"
+    url="https://qficapital.in/"
+    dates="October 2025 – December 2025"
+    location="Remote"
+  >
+    <li>
+      Built a library of <b>20+ algorithmic strategies</b> (EMA/VWAP
+      crossovers, mean reversion, momentum, options-volatility) for the
+      trading engine.
+    </li>
+    <li>
+      Implemented the <b>Bajaj Broking</b> client from scratch — order
+      placement, modification, holdings, and positions via their BridgeLink
+      REST API — extending the platform's broker abstraction alongside
+      <b>Kite Connect</b> and <b>Nubra</b>.
+    </li>
+    <li>
+      Built options-analytics screens computing per-strike Greeks (delta,
+      gamma, theta, vega, rho) and IV/VIX time series, plus the trading
+      dashboard, charts, and watchlist in <b>React 19</b>/TypeScript.
+    </li>
+    <li>
+      Designed the real-time market-data pipeline, streaming ticks over
+      WebSocket into <b>Kafka</b> and aggregating them into <b>InfluxDB</b>
+      with <b>Redis</b>-cached prices, backing the platform's live charts
+      and strategy signals.
+    </li>
+  </Workplace>
+
+  <Workplace
     title="System Architecture and Platform Design"
     company="Spring Fest, IIT Kharagpur"
     url="https://www.instagram.com/iitkgp.springfest/?hl=en"
@@ -157,6 +188,33 @@
     <li>
       Shipped a React Native app on the Play Store (1K+ downloads) with backend
       integration for event access and admin tools.
+    </li>
+  </Workplace>
+
+  <Workplace
+    title="Frontend Engineer Intern"
+    company="Autonmis"
+    url="https://autonmis.com/"
+    dates="October 2024 – November 2024"
+    location="Remote"
+  >
+    <li>
+      Built frontend features for Autonmis's AI-native operations platform,
+      which auto-builds dashboards, KPIs, and exception alerts from
+      plain-language input.
+    </li>
+    <li>
+      Built an in-browser SQL editor using <b>Monaco Editor</b> for querying
+      and exploring connected data sources.
+    </li>
+    <li>
+      Built an open connector library enabling database connections across
+      multiple engines (Postgres, Snowflake, Salesforce, Google Sheets, S3)
+      for a unified data layer.
+    </li>
+    <li>
+      Wired those connectors into the platform's backend reconciliation and
+      exception-detection workflows.
     </li>
   </Workplace>
 
@@ -325,8 +383,8 @@
       (1.2M candidates), and <b>AIR 83</b> in WBJEE, 2022.
     </li>
     <li>
-      Contributed to the <b>NixOS</b> open-source project, writing patches, refining
-      Nix expressions, and improving system builds.
+      Contributed to open-source orgs <b>NixOS</b>, <b>Stripe</b>,
+      <b>Supabase</b>, <b>Ubicloud</b>, and <b>PeerDB</b>.
     </li>
     <li>
       Served as Unit Leader for NSS Unit-4, coordinating activities and
@@ -336,6 +394,7 @@
 </section>
 
 <style lang="postcss">
+  @reference "../../app.css";
   b {
     @apply font-medium;
   }

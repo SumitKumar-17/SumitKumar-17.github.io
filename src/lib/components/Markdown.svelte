@@ -54,6 +54,7 @@
 </div>
 
 <style lang="postcss">
+  @reference "../../app.css";
   .md-output :global(p) {
     @apply mb-4 leading-relaxed;
   }
