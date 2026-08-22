@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 200" font-family="Helvetica, Arial, sans-serif">
+  <rect x="0.5" y="0.5" width="879" height="199" rx="10" fill="#ffffff" stroke="#e5e5e5" />
+
+  <text x="30" y="34" font-size="11" font-weight="600" letter-spacing="0.05em" fill="#a3a3a3">THE RIG, BY THE NUMBERS</text>
+  <line x1="30" y1="48" x2="850" y2="48" stroke="#e5e5e5" stroke-width="1" />
+
+  <g font-family="Helvetica, Arial, sans-serif">
+    <g transform="translate(30,150)">
+      <text x="0" y="0" font-size="34" font-weight="700" fill="#171717">192</text>
+      <text x="0" y="22" font-size="11" fill="#737373">cores on the target server</text>
+    </g>
+
+    <line x1="230" y1="70" x2="230" y2="180" stroke="#e5e5e5" stroke-width="1" />
+
+    <g transform="translate(260,150)">
+      <text x="0" y="0" font-size="34" font-weight="700" fill="#171717">60</text>
+      <text x="0" y="22" font-size="11" fill="#737373">client machines firing load</text>
+    </g>
+
+    <line x1="460" y1="70" x2="460" y2="180" stroke="#e5e5e5" stroke-width="1" />
+
+    <g transform="translate(490,150)">
+      <text x="0" y="0" font-size="34" font-weight="700" fill="#171717">2.07B</text>
+      <text x="0" y="22" font-size="11" fill="#737373">requests in 30 minutes</text>
+    </g>
+
+    <line x1="660" y1="70" x2="660" y2="180" stroke="#e5e5e5" stroke-width="1" />
+
+    <g transform="translate(690,150)">
+      <text x="0" y="0" font-size="34" font-weight="700" fill="#171717">~40</text>
+      <text x="0" y="22" font-size="11" fill="#737373">timeouts, out of 2 billion+</text>
+    </g>
+  </g>
+</svg>

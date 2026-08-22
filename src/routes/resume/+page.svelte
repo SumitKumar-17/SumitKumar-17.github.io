@@ -62,7 +62,7 @@
     class="resume-btn"
     rel="external"
     target="_blank"
-    href="/assets/pdf/Resume_Sumit_Kumar_IITKGP.pdf"
+    href="/assets/pdf/resume/Resume_Sumit_Kumar_IITKGP.pdf"
   >
     <FileText size={18} strokeWidth={1.8} />
     View Resume (PDF)

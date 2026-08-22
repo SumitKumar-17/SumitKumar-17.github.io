@@ -1,5 +1,6 @@
 {
   "name": "sumitkumar-17.github.io",
+  "packageManager": "npm@11.6.2",
   "type": "module",
   "private": true,
   "scripts": {

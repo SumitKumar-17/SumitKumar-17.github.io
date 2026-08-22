@@ -142,7 +142,7 @@
   <div class="space-y-5">
     <img
       alt="A black-and-white photograph of the Howrah Bridge across the Hooghly river in Kolkata"
-      src="/assets/images/kolkata-landscape.png"
+      src="/assets/images/site/kolkata-landscape.png"
     />
   </div>
 </div>

@@ -13,7 +13,7 @@
   <meta property="og:description" content={description} />
   <meta
     property="og:image"
-    content="{SITE_URL}/assets/images/kolkata-landscape.png"
+    content="{SITE_URL}/assets/images/site/kolkata-landscape.png"
   />
   <meta name="twitter:card" content="summary_large_image" />
 </svelte:head>
