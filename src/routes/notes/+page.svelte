@@ -4,6 +4,18 @@
 
   import Seo from "$lib/components/Seo.svelte";
   import Markdown from "$lib/components/Markdown.svelte";
+  import MonacoEditor from "./MonacoEditor.svelte";
+  import FloatingPanel from "./FloatingPanel.svelte";
+  import NoteTabs from "./NoteTabs.svelte";
+  import Toast from "./Toast.svelte";
+  import {
+    type Note,
+    loadCollection,
+    saveCollection,
+    loadActiveId,
+    saveActiveId,
+    newNote,
+  } from "./storage";
 
   const LANGUAGES = [
     { id: "markdown", label: "Markdown", ext: "md" },
@@ -25,236 +37,288 @@
     { id: "plaintext", label: "Plain Text", ext: "txt" },
   ];
 
-  const STORAGE_CONTENT_KEY = "notes:content";
-  const STORAGE_LANGUAGE_KEY = "notes:language";
   const SAVE_DELAY_MS = 800;
+  const UNDO_WINDOW_MS = 6000;
 
-  let containerEl: HTMLDivElement;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let editor: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let monacoApi: any;
+  let notes: Note[] = [];
+  let activeId = "";
+  let notesLoaded = false;
 
-  let language = "markdown";
-  let source = "";
-  let rendered = false;
+  let editorRef: MonacoEditor;
   let ready = false;
+  let rendered = false;
   let saveStatus: "idle" | "unsaved" | "saved" = "idle";
   let saveTimeout: ReturnType<typeof setTimeout> | undefined;
 
-  function restoreFromStorage() {
-    try {
-      const savedContent = localStorage.getItem(STORAGE_CONTENT_KEY);
-      const savedLanguage = localStorage.getItem(STORAGE_LANGUAGE_KEY);
-      if (savedContent) {
-        source = savedContent;
-        language = savedLanguage ?? "markdown";
-        saveStatus = "saved";
-      }
-    } catch {
-      // localStorage unavailable (private mode, disabled, quota) — just skip.
-    }
-  }
+  let pendingDelete: { note: Note; index: number } | null = null;
+  let pendingDeleteTimeout: ReturnType<typeof setTimeout> | undefined;
 
-  function persistNow() {
-    try {
-      if (source.trim()) {
-        localStorage.setItem(STORAGE_CONTENT_KEY, source);
-        localStorage.setItem(STORAGE_LANGUAGE_KEY, language);
-        saveStatus = "saved";
-      } else {
-        localStorage.removeItem(STORAGE_CONTENT_KEY);
-        localStorage.removeItem(STORAGE_LANGUAGE_KEY);
-        saveStatus = "idle";
-      }
-    } catch {
-      // localStorage unavailable — the note still works, it just won't persist.
-    }
-  }
-
-  function scheduleSave() {
-    saveStatus = "unsaved";
-    if (saveTimeout) clearTimeout(saveTimeout);
-    saveTimeout = setTimeout(persistNow, SAVE_DELAY_MS);
-  }
-
-  function clearNote() {
-    if (saveTimeout) clearTimeout(saveTimeout);
-    source = "";
-    editor?.setValue("");
-    persistNow();
-  }
-
-  // Monaco is loaded as plain static assets (copied from the npm package into
-  // /static/monaco) via its classic AMD loader script, not as a Vite/Rolldown
-  // module import — the ESM build's web-worker imports don't resolve in
-  // SvelteKit's server build, and this route is prerendered like every other
-  // page. Loading it as inert static files sidesteps that entirely.
-  function loadScript(src: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const script = document.createElement("script");
-      script.src = src;
-      script.onload = () => resolve();
-      script.onerror = () => reject(new Error(`failed to load ${src}`));
-      document.head.appendChild(script);
-    });
-  }
+  $: activeNote = notes.find((n) => n.id === activeId);
 
   onMount(() => {
     if (import.meta.env.SSR) return;
-    let disposed = false;
-    restoreFromStorage();
 
-    (async () => {
-      const win = window as typeof window & {
-        MonacoEnvironment?: unknown;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        require?: any;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        monaco?: any;
-      };
+    let loaded = loadCollection();
+    if (loaded.length === 0) loaded = [newNote()];
+    notes = loaded;
 
-      win.MonacoEnvironment = {
-        getWorkerUrl: () =>
-          "/monaco/vs/assets/editorWebWorkerMain-CA_vMoUU.js",
-      };
+    const savedActive = loadActiveId();
+    activeId = loaded.some((n) => n.id === savedActive)
+      ? (savedActive as string)
+      : loaded[0].id;
 
-      await loadScript("/monaco/vs/loader.js");
-      if (disposed) return;
+    saveCollection(notes);
+    saveActiveId(activeId);
+    notesLoaded = true;
 
-      win.require.config({ paths: { vs: "/monaco/vs" } });
-      await new Promise<void>((resolve) => {
-        win.require(["vs/editor/editor.main"], () => resolve());
-      });
-      if (disposed) return;
-
-      const monaco = win.monaco;
-      monacoApi = monaco;
-      editor = monaco.editor.create(containerEl, {
-        value: source,
-        language,
-        theme: "vs",
-        automaticLayout: true,
-        minimap: { enabled: false },
-        fontSize: 14,
-        wordWrap: "on",
-        scrollBeyondLastLine: false,
-        tabSize: 2,
-      });
-
-      editor.onDidChangeModelContent(() => {
-        source = editor.getValue();
-        scheduleSave();
-      });
-
-      ready = true;
-    })();
-
-    return () => {
-      disposed = true;
-    };
+    function onKeydown(e: KeyboardEvent) {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
+        e.preventDefault();
+        if (saveTimeout) clearTimeout(saveTimeout);
+        flushSave();
+      }
+    }
+    window.addEventListener("keydown", onKeydown);
+    return () => window.removeEventListener("keydown", onKeydown);
   });
 
   onDestroy(() => {
     if (saveTimeout) {
       clearTimeout(saveTimeout);
-      persistNow();
+      flushSave();
     }
-    editor?.dispose();
   });
 
-  function setLanguage(id: string) {
-    language = id;
-    if (editor && monacoApi) {
-      monacoApi.editor.setModelLanguage(editor.getModel(), id);
+  function scheduleSave() {
+    saveStatus = "unsaved";
+    if (saveTimeout) clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(flushSave, SAVE_DELAY_MS);
+  }
+
+  function flushSave() {
+    if (!activeNote) return;
+    activeNote.updatedAt = Date.now();
+    notes = notes;
+    saveCollection(notes);
+    saveStatus = activeNote.content.trim() ? "saved" : "idle";
+  }
+
+  function onEditorChange(e: CustomEvent<string>) {
+    if (!activeNote) return;
+    activeNote.content = e.detail;
+    scheduleSave();
+  }
+
+  function selectNote(id: string) {
+    if (id === activeId) return;
+    if (saveTimeout) {
+      clearTimeout(saveTimeout);
+      flushSave();
     }
+    const note = notes.find((n) => n.id === id);
+    if (!note) return;
+    activeId = id;
+    saveActiveId(id);
+    rendered = false;
+    editorRef?.setValue(note.content);
+    editorRef?.setLanguage(note.language);
+  }
+
+  function addNote() {
+    const note = newNote();
+    notes = [...notes, note];
+    saveCollection(notes);
+    selectNote(note.id);
+  }
+
+  function renameNote(e: CustomEvent<{ id: string; name: string }>) {
+    const note = notes.find((n) => n.id === e.detail.id);
+    if (!note) return;
+    note.name = e.detail.name;
+    notes = notes;
+    saveCollection(notes);
+  }
+
+  function deleteNote(e: CustomEvent<string>) {
+    const id = e.detail;
+    const index = notes.findIndex((n) => n.id === id);
+    if (index === -1) return;
+
+    const copy = [...notes];
+    const [removed] = copy.splice(index, 1);
+    const switchingActive = id === activeId;
+    const next = switchingActive ? copy[Math.max(0, index - 1)] ?? copy[0] : null;
+
+    notes = copy;
+    saveCollection(notes);
+
+    if (switchingActive && next) {
+      activeId = next.id;
+      saveActiveId(activeId);
+      editorRef?.setValue(next.content);
+      editorRef?.setLanguage(next.language);
+    }
+
+    pendingDelete = { note: removed, index };
+    if (pendingDeleteTimeout) clearTimeout(pendingDeleteTimeout);
+    pendingDeleteTimeout = setTimeout(
+      () => (pendingDelete = null),
+      UNDO_WINDOW_MS
+    );
+  }
+
+  function undoDelete() {
+    if (!pendingDelete) return;
+    const { note, index } = pendingDelete;
+    const copy = [...notes];
+    copy.splice(index, 0, note);
+    notes = copy;
+    saveCollection(notes);
+    pendingDelete = null;
+    if (pendingDeleteTimeout) clearTimeout(pendingDeleteTimeout);
+  }
+
+  function setLanguage(id: string) {
+    if (!activeNote) return;
+    activeNote.language = id;
+    notes = notes;
+    editorRef?.setLanguage(id);
     if (id !== "markdown") rendered = false;
     scheduleSave();
   }
 
   function format() {
-    editor?.getAction("editor.action.formatDocument")?.run();
+    editorRef?.format();
   }
 
   function download() {
-    const meta = LANGUAGES.find((l) => l.id === language);
-    const blob = new Blob([source], { type: "text/plain;charset=utf-8" });
+    if (!activeNote) return;
+    const meta = LANGUAGES.find((l) => l.id === activeNote?.language);
+    const blob = new Blob([activeNote.content], {
+      type: "text/plain;charset=utf-8",
+    });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `notes.${meta?.ext ?? "txt"}`;
+    a.download = `${activeNote.name || "notes"}.${meta?.ext ?? "txt"}`;
     a.click();
     URL.revokeObjectURL(url);
+  }
+
+  function clearNote() {
+    if (!activeNote) return;
+    if (saveTimeout) clearTimeout(saveTimeout);
+    activeNote.content = "";
+    notes = notes;
+    editorRef?.setValue("");
+    flushSave();
   }
 </script>
 
 <Seo title="Notes" description="Scratch code/markdown notepad." />
 
 <div class="fullscreen">
-  <div class="toolbar">
-    <select
-      class="lang-select"
-      bind:value={language}
-      on:change={() => setLanguage(language)}
-    >
-      {#each LANGUAGES as lang}
-        <option value={lang.id}>{lang.label}</option>
-      {/each}
-    </select>
+  {#if notesLoaded && activeNote}
+    <FloatingPanel storageKey="notes:panel" label="Notes">
+      <div class="toolbar-inner">
+        <NoteTabs
+          {notes}
+          {activeId}
+          on:select={(e) => selectNote(e.detail)}
+          on:add={addNote}
+          on:delete={deleteNote}
+          on:rename={renameNote}
+        />
 
-    {#if language === "markdown"}
-      <button class="btn" on:click={() => (rendered = !rendered)}>
-        {#if rendered}
-          <Pencil size={15} strokeWidth={1.8} />
-          Edit
-        {:else}
-          <Eye size={15} strokeWidth={1.8} />
-          Render
-        {/if}
-      </button>
-    {/if}
+        <div class="controls">
+          <select
+            class="lang-select"
+            value={activeNote.language}
+            on:change={(e) => setLanguage(e.currentTarget.value)}
+          >
+            {#each LANGUAGES as lang}
+              <option value={lang.id}>{lang.label}</option>
+            {/each}
+          </select>
 
-    <button class="btn" on:click={format} disabled={!ready || rendered}>
-      <Wand2 size={15} strokeWidth={1.8} />
-      Format
-    </button>
+          {#if activeNote.language === "markdown"}
+            <button class="btn" on:click={() => (rendered = !rendered)}>
+              {#if rendered}
+                <Pencil size={15} strokeWidth={1.8} />
+                Edit
+              {:else}
+                <Eye size={15} strokeWidth={1.8} />
+                Render
+              {/if}
+            </button>
+          {/if}
 
-    <button class="btn" on:click={download} disabled={!source.trim()}>
-      <Download size={15} strokeWidth={1.8} />
-      Download
-    </button>
+          <button class="btn" on:click={format} disabled={!ready || rendered}>
+            <Wand2 size={15} strokeWidth={1.8} />
+            Format
+          </button>
 
-    <button class="btn" on:click={clearNote} disabled={!source.trim()}>
-      <Trash2 size={15} strokeWidth={1.8} />
-      Clear
-    </button>
+          <button
+            class="btn"
+            on:click={download}
+            disabled={!activeNote.content.trim()}
+          >
+            <Download size={15} strokeWidth={1.8} />
+            Download
+          </button>
 
-    <span class="save-status">
-      {#if saveStatus === "unsaved"}
-        Saving…
-      {:else if saveStatus === "saved"}
-        Saved
+          <button
+            class="btn"
+            on:click={clearNote}
+            disabled={!activeNote.content.trim()}
+          >
+            <Trash2 size={15} strokeWidth={1.8} />
+            Clear
+          </button>
+
+          <span class="save-status">
+            {#if saveStatus === "unsaved"}
+              Saving…
+            {:else if saveStatus === "saved"}
+              Saved
+            {/if}
+          </span>
+        </div>
+      </div>
+    </FloatingPanel>
+
+    <div class="editor-wrap" class:hidden={rendered}>
+      {#if !ready}
+        <p class="loading">Loading editor…</p>
       {/if}
-    </span>
-  </div>
-
-  <div class="editor-wrap" class:hidden={rendered}>
-    {#if !ready}
-      <p class="loading">Loading editor…</p>
-    {/if}
-    <div bind:this={containerEl} class="monaco-container"></div>
-  </div>
-
-  {#if rendered}
-    <div class="rendered-surface">
-      {#if source.trim()}
-        <Markdown {source} />
-      {:else}
-        <p class="text-neutral-400">Nothing written yet.</p>
-      {/if}
+      <MonacoEditor
+        bind:this={editorRef}
+        bind:ready
+        initialValue={activeNote.content}
+        initialLanguage={activeNote.language}
+        on:change={onEditorChange}
+      />
     </div>
+
+    {#if rendered}
+      <div class="rendered-surface">
+        {#if activeNote.content.trim()}
+          <Markdown source={activeNote.content} />
+        {:else}
+          <p class="text-neutral-400">Nothing written yet.</p>
+        {/if}
+      </div>
+    {/if}
   {/if}
 </div>
+
+{#if pendingDelete}
+  <Toast
+    message={`Note "${pendingDelete.note.name}" deleted`}
+    actionLabel="Undo"
+    onAction={undoDelete}
+  />
+{/if}
 
 <style lang="postcss">
   @reference "../../app.css";
@@ -266,9 +330,12 @@
     z-index: 100;
   }
 
-  .toolbar {
-    @apply absolute top-4 right-4 z-10 flex items-center gap-2;
-    @apply bg-white/90 backdrop-blur rounded-full p-1.5 shadow-sm;
+  .toolbar-inner {
+    @apply flex flex-col gap-1.5;
+  }
+
+  .controls {
+    @apply flex items-center gap-2 flex-wrap;
   }
 
   .lang-select {
@@ -297,13 +364,9 @@
     display: none;
   }
 
-  .monaco-container {
-    height: 100%;
-    width: 100%;
-  }
-
   .loading {
     @apply absolute inset-0 flex items-center justify-center text-neutral-400 text-sm;
+    z-index: 1;
   }
 
   .rendered-surface {
