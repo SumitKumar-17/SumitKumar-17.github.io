@@ -25,6 +25,11 @@
       >sumitkanpur2005@gmail.com</a
     >
   </div>
+  <div class="row">
+    <span>Notes</span>
+    <hr />
+    <a class="link" href="/notes">Wanna write some notes?</a>
+  </div>
 </footer>
 
 <style lang="postcss">
