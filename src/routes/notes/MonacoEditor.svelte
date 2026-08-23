@@ -69,7 +69,9 @@
         tabSize: 2,
       });
 
-      editor.onDidChangeModelContent(() => {
+      editor.onDidChangeModelContent((e: { isFlush: boolean }) => {
+        // isFlush = programmatic setValue(), not a real user edit.
+        if (e.isFlush) return;
         dispatch("change", editor.getValue());
       });
 

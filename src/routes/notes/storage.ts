@@ -33,11 +33,11 @@ function safeRemove(key: string): void {
   }
 }
 
-export function newNote(): Note {
+export function newNote(language = "markdown"): Note {
   return {
     id: crypto.randomUUID(),
-    name: "Untitled",
-    language: "markdown",
+    name: language === "excalidraw" ? "Drawing" : "Untitled",
+    language,
     content: "",
     updatedAt: Date.now(),
   };

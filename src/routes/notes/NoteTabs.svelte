@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Plus, X } from "lucide-svelte";
+  import { PenTool, Plus, X } from "lucide-svelte";
   import { createEventDispatcher } from "svelte";
   import type { Note } from "./storage";
 
@@ -8,7 +8,7 @@
 
   const dispatch = createEventDispatcher<{
     select: string;
-    add: void;
+    add: string;
     delete: string;
     rename: { id: string; name: string };
   }>();
@@ -65,8 +65,20 @@
     </div>
   {/each}
 
-  <button class="add-btn" on:click={() => dispatch("add")} aria-label="New note">
+  <button
+    class="add-btn"
+    on:click={() => dispatch("add", "markdown")}
+    aria-label="New note"
+  >
     <Plus size={14} strokeWidth={1.8} />
+  </button>
+
+  <button
+    class="add-btn"
+    on:click={() => dispatch("add", "excalidraw")}
+    aria-label="New drawing"
+  >
+    <PenTool size={14} strokeWidth={1.8} />
   </button>
 </div>
 

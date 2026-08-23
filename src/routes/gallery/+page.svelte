@@ -9,7 +9,6 @@
 
   const categories: Category[] = [
     { name: "Internships", photos: [] },
-    { name: "Competitive Programming", photos: [] },
     { name: "Spring Fest", photos: [] },
     { name: "College Life", photos: [] },
   ];

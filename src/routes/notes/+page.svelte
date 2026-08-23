@@ -5,6 +5,7 @@
   import Seo from "$lib/components/Seo.svelte";
   import Markdown from "$lib/components/Markdown.svelte";
   import MonacoEditor from "./MonacoEditor.svelte";
+  import DrawingEditor from "./DrawingEditor.svelte";
   import FloatingPanel from "./FloatingPanel.svelte";
   import NoteTabs from "./NoteTabs.svelte";
   import Toast from "./Toast.svelte";
@@ -45,6 +46,7 @@
   let notesLoaded = false;
 
   let editorRef: MonacoEditor;
+  let drawingRef: DrawingEditor;
   let ready = false;
   let rendered = false;
   let saveStatus: "idle" | "unsaved" | "saved" = "idle";
@@ -103,10 +105,43 @@
     saveStatus = activeNote.content.trim() ? "saved" : "idle";
   }
 
+  type Scene = { elements: unknown[]; files: unknown };
+
+  function parseScene(content: string): Scene {
+    if (!content) return { elements: [], files: {} };
+    try {
+      return JSON.parse(content);
+    } catch {
+      return { elements: [], files: {} };
+    }
+  }
+
   function onEditorChange(e: CustomEvent<string>) {
     if (!activeNote) return;
     activeNote.content = e.detail;
     scheduleSave();
+  }
+
+  function onDrawingChange(e: CustomEvent<Scene>) {
+    if (!activeNote) return;
+    activeNote.content = JSON.stringify(e.detail);
+    scheduleSave();
+  }
+
+  function applyNoteToEditors(prev: Note | undefined, next: Note) {
+    const bothDrawing =
+      prev?.language === "excalidraw" && next.language === "excalidraw";
+    const bothText =
+      prev && prev.language !== "excalidraw" && next.language !== "excalidraw";
+
+    if (bothDrawing) {
+      drawingRef?.loadScene(parseScene(next.content));
+    } else if (bothText) {
+      editorRef?.setValue(next.content);
+      editorRef?.setLanguage(next.language);
+    }
+    // otherwise the editor family changed — the {#if} swap remounts the
+    // right component, which picks up the correct content from its props.
   }
 
   function selectNote(id: string) {
@@ -117,15 +152,15 @@
     }
     const note = notes.find((n) => n.id === id);
     if (!note) return;
+    const prev = activeNote;
     activeId = id;
     saveActiveId(id);
     rendered = false;
-    editorRef?.setValue(note.content);
-    editorRef?.setLanguage(note.language);
+    applyNoteToEditors(prev, note);
   }
 
-  function addNote() {
-    const note = newNote();
+  function addNote(e: CustomEvent<string>) {
+    const note = newNote(e.detail);
     notes = [...notes, note];
     saveCollection(notes);
     selectNote(note.id);
@@ -147,7 +182,10 @@
     const copy = [...notes];
     const [removed] = copy.splice(index, 1);
     const switchingActive = id === activeId;
-    const next = switchingActive ? copy[Math.max(0, index - 1)] ?? copy[0] : null;
+    const next = switchingActive
+      ? copy[Math.max(0, index - 1)] ?? copy[0]
+      : null;
+    const prev = activeNote;
 
     notes = copy;
     saveCollection(notes);
@@ -155,8 +193,7 @@
     if (switchingActive && next) {
       activeId = next.id;
       saveActiveId(activeId);
-      editorRef?.setValue(next.content);
-      editorRef?.setLanguage(next.language);
+      applyNoteToEditors(prev, next);
     }
 
     pendingDelete = { note: removed, index };
@@ -193,14 +230,17 @@
 
   function download() {
     if (!activeNote) return;
+    const isDrawing = activeNote.language === "excalidraw";
     const meta = LANGUAGES.find((l) => l.id === activeNote?.language);
     const blob = new Blob([activeNote.content], {
-      type: "text/plain;charset=utf-8",
+      type: isDrawing ? "application/json" : "text/plain;charset=utf-8",
     });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `${activeNote.name || "notes"}.${meta?.ext ?? "txt"}`;
+    a.download = `${activeNote.name || "notes"}.${
+      isDrawing ? "excalidraw" : meta?.ext ?? "txt"
+    }`;
     a.click();
     URL.revokeObjectURL(url);
   }
@@ -210,7 +250,11 @@
     if (saveTimeout) clearTimeout(saveTimeout);
     activeNote.content = "";
     notes = notes;
-    editorRef?.setValue("");
+    if (activeNote.language === "excalidraw") {
+      drawingRef?.loadScene({ elements: [], files: {} });
+    } else {
+      editorRef?.setValue("");
+    }
     flushSave();
   }
 </script>
@@ -231,32 +275,38 @@
         />
 
         <div class="controls">
-          <select
-            class="lang-select"
-            value={activeNote.language}
-            on:change={(e) => setLanguage(e.currentTarget.value)}
-          >
-            {#each LANGUAGES as lang}
-              <option value={lang.id}>{lang.label}</option>
-            {/each}
-          </select>
+          {#if activeNote.language !== "excalidraw"}
+            <select
+              class="lang-select"
+              value={activeNote.language}
+              on:change={(e) => setLanguage(e.currentTarget.value)}
+            >
+              {#each LANGUAGES as lang}
+                <option value={lang.id}>{lang.label}</option>
+              {/each}
+            </select>
 
-          {#if activeNote.language === "markdown"}
-            <button class="btn" on:click={() => (rendered = !rendered)}>
-              {#if rendered}
-                <Pencil size={15} strokeWidth={1.8} />
-                Edit
-              {:else}
-                <Eye size={15} strokeWidth={1.8} />
-                Render
-              {/if}
+            {#if activeNote.language === "markdown"}
+              <button class="btn" on:click={() => (rendered = !rendered)}>
+                {#if rendered}
+                  <Pencil size={15} strokeWidth={1.8} />
+                  Edit
+                {:else}
+                  <Eye size={15} strokeWidth={1.8} />
+                  Render
+                {/if}
+              </button>
+            {/if}
+
+            <button
+              class="btn"
+              on:click={format}
+              disabled={!ready || rendered}
+            >
+              <Wand2 size={15} strokeWidth={1.8} />
+              Format
             </button>
           {/if}
-
-          <button class="btn" on:click={format} disabled={!ready || rendered}>
-            <Wand2 size={15} strokeWidth={1.8} />
-            Format
-          </button>
 
           <button
             class="btn"
@@ -287,18 +337,28 @@
       </div>
     </FloatingPanel>
 
-    <div class="editor-wrap" class:hidden={rendered}>
-      {#if !ready}
-        <p class="loading">Loading editor…</p>
-      {/if}
-      <MonacoEditor
-        bind:this={editorRef}
-        bind:ready
-        initialValue={activeNote.content}
-        initialLanguage={activeNote.language}
-        on:change={onEditorChange}
-      />
-    </div>
+    {#if activeNote.language === "excalidraw"}
+      <div class="editor-wrap">
+        <DrawingEditor
+          bind:this={drawingRef}
+          initialData={parseScene(activeNote.content)}
+          on:change={onDrawingChange}
+        />
+      </div>
+    {:else}
+      <div class="editor-wrap" class:hidden={rendered}>
+        {#if !ready}
+          <p class="loading">Loading editor…</p>
+        {/if}
+        <MonacoEditor
+          bind:this={editorRef}
+          bind:ready
+          initialValue={activeNote.content}
+          initialLanguage={activeNote.language}
+          on:change={onEditorChange}
+        />
+      </div>
+    {/if}
 
     {#if rendered}
       <div class="rendered-surface">
