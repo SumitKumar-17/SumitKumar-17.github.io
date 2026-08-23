@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onDestroy, onMount } from "svelte";
-  import { Download, Eye, Pencil, Wand2 } from "lucide-svelte";
+  import { Download, Eye, Pencil, Trash2, Wand2 } from "lucide-svelte";
 
   import Seo from "$lib/components/Seo.svelte";
   import Markdown from "$lib/components/Markdown.svelte";
@@ -25,6 +25,10 @@
     { id: "plaintext", label: "Plain Text", ext: "txt" },
   ];
 
+  const STORAGE_CONTENT_KEY = "notes:content";
+  const STORAGE_LANGUAGE_KEY = "notes:language";
+  const SAVE_DELAY_MS = 800;
+
   let containerEl: HTMLDivElement;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let editor: any;
@@ -35,6 +39,51 @@
   let source = "";
   let rendered = false;
   let ready = false;
+  let saveStatus: "idle" | "unsaved" | "saved" = "idle";
+  let saveTimeout: ReturnType<typeof setTimeout> | undefined;
+
+  function restoreFromStorage() {
+    try {
+      const savedContent = localStorage.getItem(STORAGE_CONTENT_KEY);
+      const savedLanguage = localStorage.getItem(STORAGE_LANGUAGE_KEY);
+      if (savedContent) {
+        source = savedContent;
+        language = savedLanguage ?? "markdown";
+        saveStatus = "saved";
+      }
+    } catch {
+      // localStorage unavailable (private mode, disabled, quota) — just skip.
+    }
+  }
+
+  function persistNow() {
+    try {
+      if (source.trim()) {
+        localStorage.setItem(STORAGE_CONTENT_KEY, source);
+        localStorage.setItem(STORAGE_LANGUAGE_KEY, language);
+        saveStatus = "saved";
+      } else {
+        localStorage.removeItem(STORAGE_CONTENT_KEY);
+        localStorage.removeItem(STORAGE_LANGUAGE_KEY);
+        saveStatus = "idle";
+      }
+    } catch {
+      // localStorage unavailable — the note still works, it just won't persist.
+    }
+  }
+
+  function scheduleSave() {
+    saveStatus = "unsaved";
+    if (saveTimeout) clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(persistNow, SAVE_DELAY_MS);
+  }
+
+  function clearNote() {
+    if (saveTimeout) clearTimeout(saveTimeout);
+    source = "";
+    editor?.setValue("");
+    persistNow();
+  }
 
   // Monaco is loaded as plain static assets (copied from the npm package into
   // /static/monaco) via its classic AMD loader script, not as a Vite/Rolldown
@@ -54,6 +103,7 @@
   onMount(() => {
     if (import.meta.env.SSR) return;
     let disposed = false;
+    restoreFromStorage();
 
     (async () => {
       const win = window as typeof window & {
@@ -94,6 +144,7 @@
 
       editor.onDidChangeModelContent(() => {
         source = editor.getValue();
+        scheduleSave();
       });
 
       ready = true;
@@ -105,6 +156,10 @@
   });
 
   onDestroy(() => {
+    if (saveTimeout) {
+      clearTimeout(saveTimeout);
+      persistNow();
+    }
     editor?.dispose();
   });
 
@@ -114,6 +169,7 @@
       monacoApi.editor.setModelLanguage(editor.getModel(), id);
     }
     if (id !== "markdown") rendered = false;
+    scheduleSave();
   }
 
   function format() {
@@ -167,6 +223,19 @@
       <Download size={15} strokeWidth={1.8} />
       Download
     </button>
+
+    <button class="btn" on:click={clearNote} disabled={!source.trim()}>
+      <Trash2 size={15} strokeWidth={1.8} />
+      Clear
+    </button>
+
+    <span class="save-status">
+      {#if saveStatus === "unsaved"}
+        Saving…
+      {:else if saveStatus === "saved"}
+        Saved
+      {/if}
+    </span>
   </div>
 
   <div class="editor-wrap" class:hidden={rendered}>
@@ -214,6 +283,10 @@
     @apply border border-neutral-300 rounded-full px-3 py-1.5;
     @apply bg-white hover:bg-neutral-100 hover:border-neutral-400 transition-colors;
     @apply disabled:opacity-40 disabled:pointer-events-none;
+  }
+
+  .save-status {
+    @apply text-xs text-neutral-400 px-1.5 min-w-[3.5rem];
   }
 
   .editor-wrap {
