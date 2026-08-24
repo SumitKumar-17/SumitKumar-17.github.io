@@ -116,7 +116,6 @@
     company="Steps AI"
     url="https://stepsai.co/"
     dates="June 2025 – Present"
-    location="Remote"
   >
     <li>
       Engineered async Python microservices with <b>FastAPI</b> and
@@ -146,7 +145,6 @@
     company="QFI Research Capital"
     url="https://qficapital.in/"
     dates="October 2025 – December 2025"
-    location="Remote"
   >
     <li>
       Built a library of <b>20+ algorithmic strategies</b> (EMA/VWAP
@@ -202,7 +200,6 @@
     company="Autonmis"
     url="https://autonmis.com/"
     dates="October 2024 – November 2024"
-    location="Remote"
   >
     <li>
       Built frontend features for Autonmis's AI-native operations platform,
@@ -229,7 +226,6 @@
     company="ParallelDots"
     url="https://paralleldots.com/"
     dates="December 2024 – January 2025"
-    location="Remote"
   >
     <li>
       Improved Android render speed by 25% and cut cold start by ~3.2s via
