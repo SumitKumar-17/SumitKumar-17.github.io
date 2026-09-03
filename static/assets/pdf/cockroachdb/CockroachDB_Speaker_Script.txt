@@ -1,0 +1,731 @@
+========================================================================
+SPEAKER SCRIPT
+CockroachDB: The Resilient Geo-Distributed SQL Database (SIGMOD 2020)
+CS60113 - Advanced Database Systems
+45 slides total: title + 2 Raft-prerequisite slides + 26 core slides (~26-28 min
+core talk) + a 16-slide backup 'Live Demonstration' appendix for Q&A / if time permits.
+========================================================================
+
+--------------------------------------------------------------------
+SLIDE 1 - Title (0:00 - 0:25, ~25 sec)
+--------------------------------------------------------------------
+SAY:
+"Good morning/afternoon everyone. Today I'll be presenting 'CockroachDB:
+The Resilient Geo-Distributed SQL Database', a SIGMOD 2020 paper from
+Cockroach Labs. This paper describes a production database system that
+tries to answer one hard question: can you get a normal, easy-to-use SQL
+database that also spans the entire globe, survives datacenters going
+down, and still guarantees your transactions are correct -- all without
+needing exotic hardware? Let's dig in."
+
+--------------------------------------------------------------------
+SLIDE 2 - Prerequisite: Raft Consensus (I) (0:25 - 1:35, ~1.2 min)
+--------------------------------------------------------------------
+SAY:
+"Before we get into CockroachDB specifically, I want to make sure
+everyone has one piece of background: the Raft consensus protocol,
+because almost everything CockroachDB does builds on top of it.
+
+At its core, Raft solves one problem: how do several machines, each
+holding a copy of the same data, agree on the order of a sequence of
+updates -- even if some of those machines crash or become unreachable?
+Raft organizes a small group of replicas -- here, three -- into what's
+called a Raft group. As you'll see on screen, one replica acts as the
+leader, and the rest are followers.
+
+CockroachDB uses one independent Raft group PER shard of data -- what it
+calls a Range, about 64 megabytes each. So a CockroachDB cluster isn't
+running one instance of Raft, it's running potentially thousands of tiny
+independent Raft groups, one per Range. Three replicas is the default,
+because with three, you can lose any one and still have a majority of
+two left to keep working."
+
+--------------------------------------------------------------------
+SLIDE 3 - Prerequisite: Raft Consensus (II) (1:35 - 2:35, ~1 min)
+--------------------------------------------------------------------
+SAY:
+"So what does the leader actually do? It proposes commands -- think of
+each command as one write operation -- and sends them out to the
+followers. Critically, a command is only considered 'accepted' once a
+quorum, meaning a strict majority of the group, has acknowledged
+receiving it. That's the safety property that makes this 'atomic
+replication': even if the leader crashes right after proposing a
+command, as long as a majority already has it, that command is
+guaranteed to survive and a new leader will carry it forward.
+
+One mapping that will matter for the rest of this talk: in CockroachDB,
+the Raft leader for a Range and what CockroachDB calls the
+'leaseholder' are the same replica. So whenever I say 'leaseholder'
+from this point on, mentally substitute 'the Raft leader for that
+chunk of data'. With that vocabulary in place, let's get into the
+actual paper."
+
+--------------------------------------------------------------------
+SLIDE 4 - Motivation (2:35 - 3:45, ~1.2 min)
+--------------------------------------------------------------------
+SAY:
+"Let's start with why this problem exists at all. Think about a company
+like Netflix or a bank that has customers in Europe, the US, and
+Australia. Three things are colliding here.
+
+First, regulation: GDPR says personal data of EU citizens has to
+physically live inside the EU. Not 'mostly' -- physically.
+
+Second, physics: if a user in Australia has to send every query across
+the ocean to a database sitting in Virginia, they'll feel it as lag.
+Data should live close to the people using it.
+
+Third, expectations: users expect 'always on'. If an entire AWS region
+goes down, they still expect to log in and see their data.
+
+Traditional single-master relational databases were built assuming one
+datacenter, one master node, and were never designed for this. On the
+right you can see Figure 1 from the paper, showing exactly the kind of
+globally-spread deployment we're talking about."
+
+--------------------------------------------------------------------
+SLIDE 5 - Motivation: The Reference Scenario (3:45 - 4:45, ~1 min)
+--------------------------------------------------------------------
+SAY:
+"This diagram is worth pausing on. It shows a single CockroachDB cluster
+spanning EU-west, EU-east, an EU-south on-premises datacenter, US-east,
+and AU-north/AU-south -- six regions total. Each little box labeled R1
+through R7 is a replica of some chunk of data; the ones marked with a
+star, like R1-star, are the leaseholder for that chunk -- the replica
+that's authoritative and physically close to the clients it serves.
+
+Notice EU-south is deliberately marked 'on-prem' -- this is exactly the
+GDPR scenario: European personal data can be pinned to run on hardware
+physically inside the EU, on the company's own servers if needed, while
+still being part of the same logical database as everything else. This
+single picture captures compliance, locality, and fault tolerance all at
+once, which is the promise we'll spend the rest of the talk unpacking."
+
+--------------------------------------------------------------------
+SLIDE 6 - Problem Statement (4:45 - 5:55, ~1.2 min)
+--------------------------------------------------------------------
+SAY:
+"So concretely, what did the CockroachDB team set out to build? Four
+things, and I want you to hold onto these because the rest of the talk
+is basically 'how do we achieve each one'.
+
+One: horizontal scalability on commodity hardware -- just normal cloud
+VMs, no special network cards, no atomic clocks.
+
+Two: geo-distributed transactions that are serializable -- the gold
+standard of consistency, meaning transactions behave as if they ran one
+at a time in some order, even though they're actually running
+concurrently across continents.
+
+Three: fault tolerance -- survive not just a single machine dying, but
+an entire availability zone or region going dark.
+
+Four: give the user control over data placement, so they can literally
+say 'keep this table's data in the EU'.
+
+The hard constraint underneath all of this: no specialized hardware for
+clock synchronization. This is a direct contrast to Google Spanner,
+which I'll get to shortly, and it's the single biggest design
+constraint in this paper."
+
+--------------------------------------------------------------------
+SLIDE 7 - Background: Architecture Basics (5:55 - 6:55, ~1 min)
+--------------------------------------------------------------------
+SAY:
+"Before the clever parts, let's get the architecture vocabulary
+straight. CockroachDB is layered: SQL layer on top, which looks exactly
+like Postgres to your application; a Transactional KV layer underneath
+that guarantees atomicity and isolation; and a Distribution layer below
+that.
+
+Here's the key idea: CockroachDB treats the ENTIRE database, across
+every machine in the cluster, as one giant sorted key-value map. Think
+of it like one enormous phone book sorted alphabetically, except it's
+sharded into chunks called 'Ranges', each about 64 megabytes. As data
+grows, Ranges automatically split, like a phone book splitting into
+multiple volumes when it gets too big for one book."
+
+--------------------------------------------------------------------
+SLIDE 8 - Background: Replication & Leases (6:55 - 7:55, ~1 min)
+--------------------------------------------------------------------
+SAY:
+"Now, each of those Ranges is replicated -- by default, 3 copies on 3
+different machines, for fault tolerance. To keep those 3 copies
+consistent, CockroachDB uses a well-known consensus protocol called
+Raft. Think of Raft like a small committee of 3 people who must vote
+before any change is accepted -- as long as 2 out of 3 are alive and
+agree, the group keeps functioning even if one member is unreachable.
+
+One optimization on top of Raft: one replica in each group is elected
+the 'leaseholder', like the committee chair. It can serve reads
+directly, from its own local copy, without going through a full vote
+each time. This saves a lot of network round trips, since reads are far
+more common than writes."
+
+--------------------------------------------------------------------
+SLIDE 9 - The Gap in Existing Work (I) (7:55 - 9:10, ~1.25 min)
+--------------------------------------------------------------------
+SAY:
+"So why was a new system needed? Google Spanner is the most famous
+comparison point. Spanner achieves the strongest possible consistency --
+strict serializability -- but it does so using something called
+TrueTime: literally GPS receivers and atomic clocks installed in
+Google's own datacenters, giving Spanner a clock uncertainty bound of
+just a few milliseconds. Every read-write transaction has to acquire
+locks and then deliberately WAIT OUT that uncertainty window before it
+can commit. It works beautifully, but it only works if you own the
+hardware -- which effectively means you're locked into Google Cloud.
+
+Then there are systems like Calvin, FaunaDB, and SLOG. These get strong
+consistency by requiring you to know all the reads and writes of a
+transaction in advance, so they can be scheduled deterministically. But
+that breaks normal, interactive SQL -- you can't say 'let me read this
+row, then decide what to write based on what I saw'."
+
+--------------------------------------------------------------------
+SLIDE 10 - The Gap in Existing Work (II) (9:10 - 9:55, ~0.75 min)
+--------------------------------------------------------------------
+SAY:
+"So here's the gap: nobody had shown you could get serializable,
+globally-distributed SQL transactions on ordinary commodity servers,
+with clocks that are only loosely synchronized via software, like NTP,
+while still supporting normal, ad-hoc, interactive SQL. That's exactly
+the gap CockroachDB fills, and it's the thread that ties together
+everything in the rest of this talk."
+
+--------------------------------------------------------------------
+SLIDE 11 - Core Contribution 1: Hybrid-Logical Clocks (9:55 - 11:10, ~1.25 min)
+--------------------------------------------------------------------
+SAY:
+"So without atomic clocks, how do you even order events across
+machines? The first piece of the puzzle is the Hybrid-Logical Clock, or
+HLC.
+
+An HLC is a combination of two things: the machine's regular physical
+clock, plus a Lamport logical counter -- think of the logical counter as
+a tie-breaker ticket number. Whenever two nodes talk to each other, they
+attach their HLC timestamp to the message, and the receiver bumps its
+own clock forward if needed to stay ahead of anything it just learned
+about. This is exactly like everyone in a room synchronizing their
+watches slightly every time they shake hands with someone whose watch is
+ahead.
+
+This gives three properties: causality tracking, strict monotonicity --
+a single node's clock never goes backwards, even after a restart -- and
+self-stabilization -- clocks that briefly drift apart naturally pull
+back together over time."
+
+--------------------------------------------------------------------
+SLIDE 12 - Core Contribution 2: Uncertainty Intervals (11:10 - 12:25, ~1.25 min)
+--------------------------------------------------------------------
+SAY:
+"HLCs solve ordering for events that are causally related through
+messages. But what about two transactions on completely different nodes
+that never talked to each other? Their physical clocks might be off by
+a small amount, say up to 500 milliseconds, the configured maximum
+offset.
+
+CockroachDB's answer is the 'uncertainty interval'. Every transaction
+gets a timestamp, plus a window stretching forward by that maximum clock
+offset. If the transaction encounters a value written inside that
+uncertain window, it can't be sure whether that write 'really' happened
+before or after it in real time -- so instead of guessing, it just bumps
+its own timestamp past that value and retries the check. This gives you
+correctness guarantees equivalent to a perfectly synchronized clock,
+using only an uncertainty window instead of a hardware guarantee."
+
+--------------------------------------------------------------------
+SLIDE 13 - Behavior Under Clock Skew (12:25 - 13:25, ~1 min)
+--------------------------------------------------------------------
+SAY:
+"A natural question: what if clocks drift by MORE than that configured
+offset -- what actually breaks? The answer is: less than you'd think.
+Within a single Range, Raft doesn't depend on clocks at all, so its
+ordering guarantees hold no matter what. The only real risk is at the
+leaseholder boundary -- could two nodes both believe they hold the
+lease at the same time? CockroachDB closes this with two safeguards:
+lease intervals are constructed to never overlap in time, and every
+write carries the lease's sequence number, so a write proposed under a
+stale lease gets rejected outright. And as a final backstop, if a
+node's clock strays more than 80% of the configured bound from the rest
+of the cluster, it just shuts itself down rather than risk serving a
+bad read. The worst possible outcome under extreme clock skew is one
+rare stale read -- never a broken transaction."
+
+--------------------------------------------------------------------
+SLIDE 14 - Core Contribution 3: Optimistic Concurrency Control (13:25 - 14:40, ~1.25 min)
+--------------------------------------------------------------------
+SAY:
+"Now, how are the actual writes made atomic? CockroachDB uses
+Multi-Version Concurrency Control, MVCC -- meaning it never overwrites a
+value in place, it just writes a new version tagged with a timestamp.
+
+When a transaction writes something, it first writes a provisional value
+called a 'write intent' -- think of it as a sticky note saying 'this
+value is tentative, pending transaction #123'. If another transaction
+reads that key and sees the sticky note, it looks up transaction #123's
+status: pending, committed, or aborted?
+
+Conflicts are mostly resolved optimistically, by nudging one
+transaction's timestamp forward rather than blocking everyone. Only in
+a genuine cycle -- A waiting on B, B waiting on A -- does the system fall
+back to aborting one of them via distributed deadlock detection."
+
+--------------------------------------------------------------------
+SLIDE 15 - Optimization 1: Read Refreshes (14:40 - 15:40, ~1 min)
+--------------------------------------------------------------------
+SAY:
+"Here's a subtlety: if a transaction's timestamp gets pushed forward
+because of a conflict, doesn't that mean everything it already read
+might now be stale, forcing a full restart? Not necessarily.
+
+CockroachDB tries something called a 'read refresh' first: it just
+re-checks whether any of the keys it already read have actually changed
+in that small time window. If nothing changed, the transaction can just
+continue forward at the new timestamp -- no expensive restart needed.
+It's like double-checking your grocery list against the shelf one more
+time before checkout, instead of walking back through the entire store
+from scratch."
+
+--------------------------------------------------------------------
+SLIDE 16 - Optimization 2: Write Pipelining & Parallel Commits (15:40 - 17:10, ~1.5 min)
+--------------------------------------------------------------------
+SAY:
+"Next, performance. Distributed consensus is expensive -- every write
+needs a round trip for replication. Two optimizations attack this
+directly.
+
+Write Pipelining: if two operations in the same transaction don't touch
+overlapping keys, the coordinator doesn't wait for the first one to
+fully replicate before issuing the second -- an assembly line instead of
+one worker doing every step in sequence.
+
+Parallel Commits is the bigger idea. Normally, committing a multi-write
+transaction needs two full sequential rounds of consensus. CRDB
+introduces an intermediate 'staging' state, where the commit record says
+'I am committed IF all these writes finish replicating.' This lets the
+commit marker replicate in parallel with the last writes.
+
+On the right is Figure 2 from the paper: green is Parallel Commits, blue
+dashed is classic two-phase commit. As the number of secondary indexes
+grows -- meaning more Ranges get touched per transaction -- two-phase
+commit's throughput drops and its latency climbs, while Parallel Commits
+stays flat. The paper reports up to 72% higher throughput and 47% lower
+p50 latency."
+
+--------------------------------------------------------------------
+SLIDE 17 - Optimization 3: Geo-Partitioning & Follower Reads (17:10 - 18:25, ~1.25 min)
+--------------------------------------------------------------------
+SAY:
+"Now let's connect this back to the geo-distribution motivation from the
+start. CockroachDB gives users three placement policies.
+
+Geo-Partitioned Replicas: pin an entire partition -- say, all EU
+customer rows -- to EU machines. Fast local reads and writes, but if the
+whole EU region goes down, that data is briefly unavailable.
+
+Geo-Partitioned Leaseholders: keep replicas spread across regions for
+survivability, but pin the leaseholder to the primary region. Reads
+stay fast locally, writes get a bit slower, but the data survives a
+regional outage.
+
+Duplicated Indexes: for data that's read constantly but rarely written,
+just duplicate it into every region.
+
+And separately, Follower Reads let a non-leaseholder replica serve
+slightly-stale historical reads directly, using a 'closed timestamp' --
+a promise that no future write will land at or before that time."
+
+--------------------------------------------------------------------
+SLIDE 18 - The SQL Layer & Query Optimizer (18:25 - 19:25, ~1 min)
+--------------------------------------------------------------------
+SAY:
+"Let's shift gears from the transaction engine to the SQL layer sitting
+on top of it, because this is where a normal query actually gets turned
+into a plan. CockroachDB uses a Cascades-style optimizer -- the same
+general family of optimizer used by many commercial databases -- which
+explores over 200 transformation rules to find a cheap query plan.
+These rules are written in a small in-house language called Optgen that
+compiles to Go.
+
+What's specific to CockroachDB is that this optimizer is
+'distribution-aware': it knows which regions data lives in, so it can
+add extra filters that make an index scan more selective, and for
+duplicated indexes it can prefer whichever physical copy is closest to
+where the query came in, minimizing how much data has to cross a
+region boundary."
+
+--------------------------------------------------------------------
+SLIDE 19 - Physical Planning & Execution (19:25 - 20:25, ~1 min)
+--------------------------------------------------------------------
+SAY:
+"Once the optimizer picks a plan, it has to become something that
+actually runs, potentially across multiple machines. This is Figure 3
+from the paper: a distributed hash join across two tables, a and b, on
+a 3-node cluster. Each node gets its own TableReader operator reading
+its local slice of the data; the hash-join and shuffle logic then runs
+right there, on the same node, instead of dragging all the data to one
+central place first. This 'push compute to the data' principle is why
+CockroachDB can execute a join across a sharded table without a
+massive network shuffle. Only when a query is estimated to touch very
+little data does CockroachDB skip all this and just run everything on
+the single gateway node instead."
+
+--------------------------------------------------------------------
+SLIDE 20 - Execution Engines: Row-at-a-Time vs Vectorized (20:25 - 21:25, ~1 min)
+--------------------------------------------------------------------
+SAY:
+"Underneath the physical plan, CockroachDB actually has two different
+execution engines. The default is a row-at-a-time engine, based on the
+classic Volcano iterator model -- simple, supports every SQL feature,
+but pays a small interpreter cost for every single row.
+
+For a growing subset of queries, CockroachDB can instead use a
+vectorized engine, inspired by MonetDB/X100, which processes whole
+batches of rows, organized by column, at once. Since Go doesn't support
+generics with specialization, they actually generate specialized code
+per data type at build time to strip out that interpreter overhead. The
+result is up to two orders of magnitude speedup per operator, and up to
+4x on TPC-H queries end to end."
+
+--------------------------------------------------------------------
+SLIDE 21 - Schema Changes (21:25 - 22:10, ~0.75 min)
+--------------------------------------------------------------------
+SAY:
+"One more SQL-layer detail worth knowing: how do you add a column or an
+index to a table that's actively serving production traffic, without
+taking it offline? CockroachDB borrows Google F1's approach: break the
+schema change into a sequence of small intermediate versions, and never
+let more than two versions be live across the cluster at once. Adding a
+secondary index, for example, needs two intermediate versions
+specifically to guarantee the index is being kept fully up to date by
+writes before it's ever exposed to reads."
+
+--------------------------------------------------------------------
+SLIDE 22 - Experimental Setup (22:10 - 22:55, ~0.75 min)
+--------------------------------------------------------------------
+SAY:
+"Now let's talk about how all of this was validated. Three benchmark
+families: Sysbench OLTP for raw vertical and horizontal scalability;
+TPC-C, the classic industry-standard OLTP benchmark, pushed all the way
+to 100,000 warehouses against Amazon Aurora; and YCSB for a head-to-head
+comparison against Google Cloud Spanner. On top of that, a dedicated
+9-node, 3-region GCP cluster where they deliberately killed an
+availability zone and then an entire region mid-benchmark, to see how
+each placement policy behaves under real failure."
+
+--------------------------------------------------------------------
+SLIDE 23 - Results I: Scalability (22:55 - 23:55, ~1 min)
+--------------------------------------------------------------------
+SAY:
+"On the left, Figure 4: throughput per vCPU stays essentially flat as
+they scale from 3 nodes all the way to 48 -- exactly what you want,
+since it means adding machines gives you proportional extra capacity,
+not diminishing returns. On the right, Figure 5: this is TPC-C with a
+varying percentage of remote, cross-node transactions and varying
+replication factors. Cross-node coordination does cost something -- up
+to roughly 46 to 57% overhead -- but notice every single line still
+scales up with cluster size. That's the key point: overhead, yes;
+scaling collapse, no."
+
+--------------------------------------------------------------------
+SLIDE 24 - Results I: TPC-C at Scale vs Amazon Aurora (23:55 - 24:55, ~1 min)
+--------------------------------------------------------------------
+SAY:
+"This table is the headline number of the whole evaluation. At 100,000
+warehouses -- that's 50 billion rows, 8 terabytes of data, spread over
+81 nodes -- CockroachDB sustains 98.8% of theoretical maximum
+efficiency. Compare that to Amazon Aurora, which is architecturally
+single-master: at just 10,000 warehouses, Aurora's efficiency collapses
+to 7.3%, because a single master node becomes the bottleneck. That's
+the clearest demonstration in the paper of why a shared-nothing,
+leaderless-per-shard architecture matters once you're operating at real
+scale."
+
+--------------------------------------------------------------------
+SLIDE 25 - Results II: CockroachDB vs Spanner (24:55 - 25:55, ~1 min)
+--------------------------------------------------------------------
+SAY:
+"Figure 7 compares CockroachDB against Spanner on YCSB. Across most of
+the six workloads, A through F, CockroachDB's green bars beat Spanner's
+blue bars on throughput, and on the right you can see CRDB shows lower
+read and update latency at every percentile under light load. The one
+exception is Workload A, which is write-heavy with highly skewed,
+contended keys -- CockroachDB's optimistic protocol doesn't scale as
+well there, and the authors are upfront about it, noting they were
+already working on optional read locking to address it."
+
+--------------------------------------------------------------------
+SLIDE 26 - Results II: Fault Tolerance Under Failures (25:55 - 26:55, ~1 min)
+--------------------------------------------------------------------
+SAY:
+"This is Figure 6: TPC-C throughput and p90 latency over time, with an
+availability-zone failure injected around the 20-minute mark and a full
+region failure around the 45-minute mark. All four placement policies
+survive the AZ failure with only a mild, temporary dip. But look at
+what happens during the region failure: only the green line -- Geo-
+Partitioned Leaseholders -- keeps serving smoothly. The others drop
+sharply because their leaseholders were concentrated in the region that
+just went down. That resilience comes at a cost though: notice the
+green line's latency is consistently higher even during normal
+operation, since some writes now always have to cross regions."
+
+--------------------------------------------------------------------
+SLIDE 27 - Case Studies (26:55 - 27:40, ~0.75 min)
+--------------------------------------------------------------------
+SAY:
+"Two quick real-world examples. A US telecom provider built a 24/7
+virtual customer support agent on top of a CockroachDB sessions
+database, split across their own on-prem datacenter and AWS, chosen
+specifically for strong consistency and regional fault tolerance. And
+an online gaming company processing 30 to 40 million financial
+transactions a day, with users concentrated in Europe and Australia and
+a fast-growing US base, adopted the Geo-Partitioned Leaseholders policy
+we just saw survive a region failure -- exactly to isolate failure
+domains and keep user data compliant with locality requirements."
+
+--------------------------------------------------------------------
+SLIDE 28 - Lessons Learned (27:40 - 28:25, ~0.75 min)
+--------------------------------------------------------------------
+SAY:
+"The paper also has a refreshingly honest 'lessons learned from 5 years
+in production' section. They found textbook Raft too chatty at scale
+with hundreds of thousands of Raft groups, so they coalesced heartbeats
+and adopted Joint Consensus for safe membership changes during
+rebalancing. They actually REMOVED Snapshot Isolation as an option,
+because supporting it safely alongside Serializable would have required
+pessimistic locking everywhere. And they note that near-zero-downtime
+version upgrades remain genuinely hard in a system this complex."
+
+--------------------------------------------------------------------
+SLIDE 29 - Conclusions & Takeaways (28:25 - 29:25, ~1 min)
+--------------------------------------------------------------------
+SAY:
+"So, to wrap up: CockroachDB's core contribution is proving that
+serializable isolation at global scale does not require specialized
+clock hardware -- hybrid-logical clocks plus uncertainty intervals are
+enough. Parallel Commits and read refreshes claw back most of the
+latency that distributed consensus would otherwise cost you. And
+configurable data placement means the same system can serve very
+different compliance, latency, and fault-tolerance requirements just by
+changing configuration, not code.
+
+The authors are candid that this isn't a finished story -- they call out
+disaggregated storage, serverless scaling, and geo-aware query
+optimization as open problems they're still working on. That's the core
+of the talk -- I've also put together a short visual walkthrough as
+backup slides, in case we have time or questions want to go deeper.
+Happy to take questions now, or I can walk through the demo slides
+first -- whichever the room prefers."
+
+========================================================================
+APPENDIX SLIDES (30-45): LIVE DEMONSTRATION WALKTHROUGH
+Use only if time remains after Q&A, or if a question calls for a
+concrete visual. These are adapted from Peter Mattis (Cockroach Labs
+co-founder), "Architecture of a Geo-Distributed SQL Database" (QCon).
+Each slide is a single diagram -- keep narration to 20-30 seconds each.
+========================================================================
+
+SLIDE 30 - Appendix divider
+SAY: "These next few slides are from a Cockroach Labs engineering talk,
+and they walk through the exact same mechanisms we just covered, but
+with a concrete worked example -- an actual key space, actual node
+names, an actual SQL statement. I find it easier to make the abstract
+stuff stick once you've seen it happen to real-looking data."
+
+SLIDE 31 - Demo: Monolithic Key Space
+SAY: "Here's our example: a DOGS table, and CockroachDB sees it as one
+sorted list of keys -- carl, dagne, figment, and so on, alphabetically.
+This is literally the 'one giant phone book' I mentioned earlier, made
+concrete."
+
+SLIDE 32 - Demo: Ranges
+SAY: "Now that phone book gets split into contiguous chunks -- Ranges.
+Here it's split into three: one holding carl-through-jack, one holding
+lady-through-peetey, one holding pinetop-through-zee. Small enough to
+move around quickly, large enough to be worth indexing."
+
+SLIDE 33 - Demo: Range Splits
+SAY: "And here's that splitting happening live, as a Range grows past
+its target size and gets divided into two smaller ones -- automatic,
+no operator intervention needed."
+
+SLIDE 34 - Demo: Range Leases
+SAY: "This is the leaseholder concept made concrete: one specific
+replica, out of four nodes holding copies, is marked as 'leaseholder',
+and it's the one that answers a read directly -- no need to check in
+with the other three first."
+
+SLIDE 35 - Demo: Geo-Partitioning for Latency & Compliance
+SAY: "Here's geo-partitioning in action: rows are tagged EU, US-East, or
+US-West based on a region column, and CockroachDB pins each partition's
+replicas to a physically separate cluster of nodes in that region --
+exactly the mechanism behind the GDPR scenario from our motivation
+slide."
+
+SLIDE 36 - Demo: Rebalancing After a Node Failure
+SAY: "And here's what happens when a node -- node 3 here, on fire --
+goes down temporarily. The leaseholder can either replay the missed
+commands or ship a fresh snapshot to catch the recovering replica back
+up, and CockroachDB picks whichever is cheaper."
+
+SLIDE 37 - Demo: A Distributed Transaction (I) - Begin
+SAY: "Now the main event: a real transaction. A client issues 'INSERT
+INTO dogs VALUES (sunny, ozzie)' -- two new keys, sunny and ozzie, that
+happen to land on two different Ranges on two different nodes."
+
+SLIDE 38 - Demo: A Distributed Transaction (II) - First Write
+SAY: "The gateway node begins the transaction, creates a transaction
+record marked PENDING, and sends the first write -- 'ozzie' -- out to
+the node holding that Range."
+
+SLIDE 39 - Demo: A Distributed Transaction (III) - Second Write, ACK
+SAY: "The second write, 'sunny', goes out to its own node in parallel,
+and we start seeing acknowledgments come back -- this is Write
+Pipelining from earlier in the talk, made visible."
+
+SLIDE 40 - Demo: A Distributed Transaction (IV) - Commit
+SAY: "Once every write is acknowledged, the transaction record flips
+from PENDING to COMMIT. This is the moment of truth for the whole
+transaction -- both dogs now officially exist, atomically, together."
+
+SLIDE 41 - Demo: A Distributed Transaction (V) - Client Acknowledged
+SAY: "Finally, the gateway acknowledges success back to the client.
+Notice this whole sequence -- two cross-node writes plus a commit
+marker -- is exactly what Parallel Commits is optimizing, by letting
+that commit marker travel alongside the writes instead of waiting for
+them first."
+
+SLIDE 42 - Demo: Mapping SQL Tables to Key-Value Pairs
+SAY: "Stepping into the SQL layer: this is literally how a table becomes
+key-value pairs. The primary key becomes part of the key path, and
+adding a secondary index -- see the highlighted INDEX line -- creates a
+whole second set of keys, ordered by name instead of id, pointing back
+to the same rows."
+
+SLIDE 43 - Demo: Query Optimization - Filter Push-Down
+SAY: "And here's an optimizer transformation happening step by step:
+'SELECT * FROM a JOIN b WHERE x > 10' starts with the filter applied
+after the join, but the optimizer proves it's safe to push that filter
+down before the join instead -- so we filter out rows earlier and do
+less work overall."
+
+SLIDE 44 - Demo: Locality-Aware Query Optimization
+SAY: "And finally, locality-aware optimization: a postal_codes table
+has three regional index copies -- EU, US-East, US-West -- and when a
+query comes in, the optimizer automatically picks whichever copy is
+physically closest to where the query originated, avoiding a
+cross-region hop entirely."
+
+SLIDE 45 - Thank You
+SAY: "That's the full walkthrough. Thank you again for your attention --
+happy to take any remaining questions."
+
+========================================================================
+Q&A PREPARATION
+========================================================================
+
+Q1: "How is this different from just running Postgres with read
+replicas across regions?"
+A: "Read replicas in Postgres are typically eventually-consistent and
+read-only -- you can't safely write to them, and there's a single
+primary that's still a bottleneck and single point of failure for
+writes. CockroachDB has no single primary at all; every Range has its
+own independently-elected leaseholder, writes are distributed across the
+whole cluster, and it guarantees serializable transactions, not just
+eventual consistency."
+
+Q2: "Doesn't relying on clock synchronization make this unsafe if
+clocks drift too much?"
+A: "Good catch -- that's exactly Section 4.3 of the paper, and the
+'Behavior Under Clock Skew' slide. Within a single Range, correctness is
+enforced by Raft regardless of clock skew, because Raft doesn't depend
+on clocks at all. The clock-dependent part is only the leaseholder
+mechanism and cross-transaction real-time ordering. CRDB has two
+explicit safeguards -- disjoint lease intervals and per-write
+lease-sequence checks -- that keep ISOLATION correct even under severe
+clock skew. What you can lose under extreme skew is single-key
+LINEARIZABILITY, i.e., a stale read in a rare edge case -- not
+correctness of transactions. And if a node's clock drifts more than 80%
+of the configured offset from the rest of the cluster, it
+self-terminates rather than risk it."
+
+Q3: "Why not just use Spanner's approach with TrueTime if it's
+provably correct?"
+A: "TrueTime requires GPS and atomic clock hardware physically installed
+in every datacenter, which only Google has deployed at scale. That
+locks you into one cloud provider. CockroachDB's whole design goal was
+to run on any commodity cloud -- AWS, GCP, Azure, on-prem -- using
+ordinary software time sync like NTP, trading a small amount of
+theoretical strictness for enormous deployment flexibility."
+
+Q4: "What happens if a Raft leader (leaseholder) fails mid-transaction?"
+A: "The remaining replicas in that Range's Raft group detect the failure
+via missed heartbeats and elect a new leader/leaseholder, as long as a
+majority of replicas are still alive. Transactions in flight will see
+their request fail or timeout and get retried/re-routed to the new
+leaseholder. This is standard Raft leader-election behavior, and it's
+why 3x replication (tolerating 1 failure) or 5x (tolerating 2) is used."
+
+Q5: "What's the actual trade-off CockroachDB makes versus Spanner in
+one sentence?"
+A: "CockroachDB trades strict serializability (Spanner's real-time
+global ordering guarantee, which needs specialized hardware) for
+serializability plus single-key linearizability (weaker global
+real-time guarantees, but still fully ACID) in exchange for running
+on commodity hardware and any cloud provider."
+
+Q6: "Why did they remove Snapshot Isolation? Isn't more options
+better?"
+A: "Not always. Section 7.2 explains that safely offering both SNAPSHOT
+and SERIALIZABLE at once would have forced them to add pessimistic
+locking to ALL row updates, even for users who only wanted
+SERIALIZABLE, just to prevent write-skew anomalies under mixed
+isolation levels. That performance tax on the common case wasn't worth
+supporting a weaker isolation level that has known correctness pitfalls
+anyway."
+
+Q7: "How does the query optimizer account for the fact that data lives
+in different regions?"
+A: "It's described in Section 5.2.2 -- the Cascades-style optimizer is
+'distribution-aware': it can push filters down using partitioning
+information (e.g., turning an OR condition into something that maps
+directly onto region-based index partitions), and for duplicated
+indexes, it assigns a cost to each replica based on how close it is to
+the query's gateway node, effectively minimizing cross-region data
+shuffling as part of normal cost-based planning."
+
+Q8: "Is this the same as sharding a MySQL database manually?"
+A: "No -- manual sharding usually means the application knows and
+manages which shard a row lives on, and cross-shard transactions are
+either unsupported or bolted on with something fragile like 2-phase
+commit across separate database instances. CockroachDB's sharding
+(Ranges) is automatic, transparent to SQL and the application, and
+cross-Range transactions get full ACID/serializable guarantees natively
+via the transaction protocol described in Section 3."
+
+Q9: "Why does CockroachDB need two separate execution engines instead
+of just optimizing one?"
+A: "The row-at-a-time engine supports 100% of CRDB's SQL surface
+(joins, window functions, everything) but pays interpreter overhead per
+row. The vectorized engine is dramatically faster -- up to two orders
+of magnitude per operator -- but only for the subset of SQL it
+currently implements, since it needs specialized, monomorphized code
+per data type (Go has no generics with specialization). It's a
+classic engineering trade-off: ship the fast path for common queries
+now, keep the general path for everything else, and grow the fast path
+over time."
+
+Q10: "How does an online schema change avoid corrupting data if
+different nodes see different schema versions at the same time?"
+A: "By construction: CockroachDB never allows more than two schema
+versions to be live across the cluster simultaneously, and each
+intermediate version is specifically designed so that whichever of the
+two versions a node is running, the data stays consistent. For example,
+adding a secondary index goes through an intermediate 'being written
+but not yet readable' version, so the index is always fully caught up
+with live writes before any query is allowed to read from it."
+
+========================================================================
+END OF SCRIPT
+========================================================================
