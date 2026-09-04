@@ -165,6 +165,15 @@
     @apply overflow-x-auto my-4 rounded-md border border-neutral-200;
   }
 
+  .md-output :global(.video-embed) {
+    @apply relative w-full my-6 rounded-md overflow-hidden;
+    aspect-ratio: 16 / 9;
+  }
+
+  .md-output :global(.video-embed iframe) {
+    @apply absolute inset-0 w-full h-full border-0;
+  }
+
   .md-output :global(table) {
     @apply w-full text-sm border-collapse;
   }
