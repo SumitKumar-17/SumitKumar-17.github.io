@@ -110,7 +110,7 @@ scattered across a file starts to bother you.
 </div>
 
 Full runnable code, including the `EMPTY TEST` / `FULL TEST` harness above, is
-up at [/assets/code/ringbuffer/main.go](/assets/code/ringbuffer/main.go).
+up at [/code/ringbuffer](/code/ringbuffer).
 Source: the [video walkthrough](https://www.youtube.com/watch?v=KyreJSKEagg&t=31s)
 above and [Josh Rosso](https://joshrosso.com)'s ring buffer writeup, which is
 where this implementation and the sensor-batching framing originate.
