@@ -1,0 +1,160 @@
+\documentclass[10pt]{extarticle}
+%\documentclass[]{file}
+\usepackage[margin=0.34in]{geometry}
+\usepackage{romannum}
+\usepackage[most]{tcolorbox}
+\usepackage{enumitem}
+% \usepackage{hyperref}
+\usepackage{tabularx}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{fontawesome}
+\usepackage[hidelinks]{hyperref}
+\setlist[itemize]{noitemsep, topsep=0pt}
+\addtolength{\parskip}{-1.5mm}
+\tcbset{
+    frame code={}
+    center title,
+    left=0pt,
+    right=0pt,
+    top=0pt,
+    bottom=0pt,
+    colback=gray!40,
+    colframe=white,
+    width=\dimexpr\textwidth\relax,
+    enlarge left by=-1mm,
+    boxsep=3pt,
+    arc=0pt,outer arc=0pt,
+    }
+\begin{document}
+\begin{flushleft}
+\noindent {\huge\textbf{Sumit Kumar}}
+\end{flushleft}
+\vspace{-1mm}
+4th Year Undergraduate  \hfill\textbf{\faPhone\hspace{1mm}}+91-7376910003 
+\\Department of Computer Science and Engineering  \hfill\textbf{\faEnvelope\hspace{2mm} }sumitkanpur2005@gmail.com
+%\noindent \textbf{\faGlobe\hspace{1mm}} \href{https://sumit-kumar-terminal-portfolio.vercel.app}{Website}
+\\Indian Institute of Technology Kharagpur \hfill\textbf{\faLinkedin\hspace{1mm} }\href{https://www.linkedin.com/in/sumit-kumar-614128207}{Sumit Kumar}
+\noindent \textbf{\faGithub\hspace{1mm}} \href{https://github.com/SumitKumar-17}{SumitKumar-17}
+
+
+\noindent\rule[0.5ex]{\linewidth}{1pt}\vspace{-4mm}
+{\large \textbf{\begin{tcolorbox}\textsc{Academic Qualifications}\end{tcolorbox}}}\vspace{-4mm}
+\begin{center}
+\begin{tabular}{|p{1.8cm}|p{7cm}|p{7.2cm}|p{1.6cm}|}
+\hline
+\centering{\textbf{Year}} & \centering{\textbf{Degree/Certificate}} & \centering{\textbf{Institute}} & \textbf{CGPA/$\%$}\\
+\hline
+\centering{2022} - Present & \centering{5 year Dual Degree Course(BTech. + MTech.) in Computer Science} & \centering{Indian Institute of Technology, Kharagpur} & 8.82/10\\
+\hline
+\centering{2022} & \centering{Class \Romannum{12} (CBSE)} & \centering{Delhi Public School, Kalyanpur} & 94.20$\%$\\
+\hline
+\centering{2020} & \centering{Class \Romannum{10} (CBSE)} & \centering{Delhi Public School, Kalyanpur} & 96.60\%\\
+\hline
+\end{tabular}
+\end{center}
+\vspace{-7.5mm}
+%%%%%%%%%%%%%%%%%%%
+
+\medskip
+{\large \textbf{\begin{tcolorbox}\textsc{Work Experiences}\end{tcolorbox}}}
+\vspace{-3mm}
+
+\begin{center}
+\textbf{Software Engineer Intern} - Atlassian
+\hfill\hfill\textit{May'26-Jul'26}
+\end{center}
+\vspace{-2mm}
+\begin{itemize}[leftmargin=1.5mm, itemsep=0pt, topsep=0pt]
+  \item Shipped \textbf{Bulk Archive} and \textbf{Bulk Delete Teams} across all Atlassian orgs via \textbf{GraphQL mutations} and frontend dialogs
+  \item Replaced a \textbf{3-4s manual deletion flow} with one API call using hierarchical async deletion on \textbf{AWS SQS} and \textbf{DynamoDB}
+  \item Proposed a fix for \textbf{notification spam} in Bulk Archive/Delete and validated it via \textbf{Splunk} in staging and production
+  \item Instrumented API latency, failure, and counter metrics with \textbf{SignalFx} dashboards and \textbf{Terraform}-managed alert rules
+\end{itemize}
+
+\vspace{1mm}
+
+\begin{center}
+\textbf{Backend Engineer Intern} - Steps AI
+\hfill\hfill\textit{Jun'25-Present}
+\end{center}
+\vspace{-2mm}
+\begin{itemize}[leftmargin=1.5mm, itemsep=0pt, topsep=0pt]
+  \item Engineered async \textbf{Python microservices} with \textbf{FastAPI} and \textbf{Pydantic}, serving agent, copilot, voice, and FAQ APIs
+  \item Orchestrated \textbf{LangGraph} and \textbf{LangChain} agents with streaming, checkpointing, and \textbf{Milvus}/\textbf{Cohere} retrieval
+  \item Built a \textbf{DAG-based workflow platform} on \textbf{PostgreSQL}/\textbf{Redis} with retries, conditional steps, and connector actions
+  \item Automated \textbf{Shopify}/\textbf{WooCommerce} product sync and embedding ingestion via \textbf{Temporal} workflows across \textbf{S3} and \textbf{Milvus}
+  \item Deployed services with \textbf{Docker} and \textbf{ArgoCD} GitOps, adding \textbf{Sentry}/\textbf{OpenTelemetry} and secure \textbf{OAuth} refresh
+\end{itemize}
+
+\vspace{1mm}
+
+\begin{center}
+\textbf{System Architecture and Platform Design} - Spring Fest
+\hfill\hfill\textit{Jul'24-Apr'25}
+\end{center}
+\vspace{-2mm}
+\begin{itemize}[leftmargin=1.5mm, itemsep=0pt, topsep=0pt]
+  \item Scaled backend for \textbf{100M+ API requests} by deploying with \textbf{Nginx}, \textbf{Redis caching} on \textbf{4 AWS EC2 t3.large} instances
+  \item Handled \textbf{80L+ transactions} by integrating \textbf{PhonePe API}, authentication using \textbf{JWT}, \textbf{OAuth2} and \textbf{rate-limited endpoints}
+  \item Delivered \textbf{99.8\% OTP/email delivery} using \textbf{MSG91}, \textbf{Mailer}, \textbf{async retry queues} and monitoring through \textbf{CloudWatch}
+  \item Shipped \textbf{React Native app} on \textbf{Play Store (1K+ downloads)} with backend integration for \textbf{event access} and \textbf{admin tools}
+\end{itemize}
+
+\vspace{-6mm}
+{\large \textbf{\begin{tcolorbox}\textsc{Projects}\end{tcolorbox}}}
+\vspace{-3mm}
+\begin{center}
+
+\textbf{Scalable Analytics Pipeline}
+\hfill\hfill\textit{Mar'25 - Apr'25}
+\end{center}
+\vspace{-2mm}
+\begin{itemize}[leftmargin=1.5mm, itemsep=0pt, topsep=0pt]
+    \item Engineered \textbf{distributed} data processing pipeline using \textbf{Apache Spark} for multi-terabyte datasets with ETL and features
+    \item Trained and optimized \textbf{ML models} (forecasting, clustering) with large-scale hyperparameter tuning and cross-validation
+    \item Designed a \textbf{real-time streaming module} (Kafka + Spark Streaming) enabling low-latency analytics and predictive monitoring
+    \item Deployed models as \textbf{REST APIs} and built an interactive dashboard with visualization and ad-hoc querying support
+\end{itemize}
+
+\vspace{1mm}
+\begin{center}
+    \textbf{Conversational AI Platform for Employee Welfare}
+    \hfill\hfill\textit{Feb'25 - Mar'25}
+    \end{center}
+    \vspace{-2mm}
+\begin{itemize}[leftmargin=1.5mm, itemsep=0pt, topsep=0pt]
+\item Built \textbf{AI-driven system} to monitor \textbf{employee well-being} by \textbf{behavioral signals}, \textbf{automated insights}, \textbf{LLM pipelines}
+\item Processed data from \textbf{1K+ users} using a \textbf{multi-stage pipeline} with \textbf{FastAPI}, \textbf{CRON jobs}, and \textbf{performance metrics}
+\item Flagged \textbf{high-risk users} with \textbf{42\% improved accuracy} using \textbf{EMA-weighted scores} and \textbf{ensemble models}
+\item Orchestrated \textbf{LLM-powered chatbot} and \textbf{summaries} via \textbf{LangChain pipelines}, enabling \textbf{context-aware insights}
+\end{itemize}
+
+\vspace{-3mm}
+{\large \textbf{\begin{tcolorbox}\textsc{Skills \& Expertise}\end{tcolorbox}}}
+\vspace{-2mm}
+
+\begin{itemize}[leftmargin=1.5mm, itemsep=0pt, topsep=0pt]
+\small \item \textbf{Programming Languages}: C/C++, Rust, Go, Elixir, Python, TypeScript, JavaScript, Bash, Awk, Verilog, SQL
+\small \item \textbf{Libraries and Frameworks}: React, Next.js, React Native, Node.js, Express, Pandas, NumPy, GraphQL, Prisma, Django, Flask
+\small \item \textbf{Tools/Platforms}: Docker, Kubernetes, Redis, MongoDB, Postgres, AWS, Azure, Git, Databricks, Linux Kernel, Raspberry Pi
+\end{itemize}
+\vspace{1mm}
+{\large \textbf{\begin{tcolorbox}\textsc{Relevant Courses}\end{tcolorbox}}}
+\vspace{-3mm}
+\begin{itemize}[leftmargin=1.5mm, itemsep=0pt, topsep=0pt]
+\small \item \textbf{Computer Science}: Programming and Data Structures, Algorithm-I, Software Engineering,Computer Organization and Architecture, Compilers, Database Management Systems, Operating Systems, Computer Networks
+\small \item \textbf{Mathematics}: Advanced Calculus,  Linear Algebra and Numerical and Complex Analysis, Probability \& Statistics, Discrete Structures, Formal Language and Automata Theory
+\small \item \textbf{More Courses}: Basic Electronics, Switching Circuits and Logic Design, Machine Learning, Data Analytics
+\end{itemize}
+\vspace{1mm}
+{\large \textbf{\begin{tcolorbox}\textsc{Awards and Achievements}\end{tcolorbox}}}
+\vspace{-3mm}
+
+\begin{itemize}[leftmargin=1.5mm, itemsep=0pt, topsep=0pt]
+\item \textbf{Codeforces} - sumitkumar-17 \textbf{1700} (Expert) $\vert$ \textbf{LeetCode} - SumitKumar-17 \textbf{2181} (Guardian)
+\item Secured AIR \textbf{2038} in JEE Advanced and \textbf{1870} in JEE Mains (1.2M candidates) in 2022.
+\item Contributed to open-source orgs \textbf{NixOS}, \textbf{Stripe}, \textbf{Supabase}, \textbf{Ubicloud}, and \textbf{PeerDB}
+\item Served as the Unit Leader for NSS Unit-4, coordinated activities, and received the \textbf{Best Volunteer Award}
+\end{itemize}
+\end{document}
