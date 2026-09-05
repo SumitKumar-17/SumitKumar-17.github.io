@@ -10,24 +10,24 @@
       desc: "custom relational database engine with its own SQL parser",
     },
     {
-      name: "C-Kafka",
-      href: "/projects/c-kafka",
-      desc: "mini Kafka clone in C exploring zero-copy and mmap I/O",
+      name: "sandkiln",
+      href: "/projects/sandkiln",
+      desc: "hardware-isolated Firecracker microVMs for running untrusted code",
     },
     {
-      name: "KTPSocket",
-      href: "/projects/ktpsocket",
-      desc: "reliable TCP-like flow control built from scratch over UDP",
+      name: "Cache-Pot",
+      href: "/projects/cache-pot",
+      desc: "Redis-compatible memory engine for AI agents, one server instead of four",
+    },
+    {
+      name: "Trading Engine",
+      href: "/projects/trading-engine",
+      desc: "real-time trading exchange simulation with a Go matching engine",
     },
     {
       name: "Mini RISC Processor",
       href: "/projects/mini-risc-processor",
       desc: "pipelined RISC processor in Verilog, run on an FPGA",
-    },
-    {
-      name: "DirScanner",
-      href: "/projects/dirscanner",
-      desc: "CLI tool that renders a directory tree as Markdown",
     },
   ];
 </script>
