@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1320 590" font-family="'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <marker id="arrow-before" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#e0743c"/>
+    </marker>
+    <marker id="arrow-after" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1f8a70"/>
+    </marker>
+    <marker id="arrow-neutral" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#8b93a1"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1320" height="590" fill="#ffffff"/>
+
+  <!-- ===================== BEFORE ROW ===================== -->
+  <text x="40" y="42" font-size="20" font-weight="700" fill="#1f2430">Before — nightly cron, blind full reindex</text>
+  <text x="40" y="64" font-size="13.5" fill="#8b93a1">no link between a source edit and the index; the cron job doesn't know what changed, so it re-embeds everything, on a timer</text>
+
+  <!-- boxes -->
+  <g font-size="14.5" fill="#1f2430">
+    <!-- box 1 -->
+    <rect x="40"  y="90" width="220" height="92" rx="10" fill="#fbeee6" stroke="#e0743c" stroke-width="1.6"/>
+    <text x="150" y="128" text-anchor="middle" font-weight="600">CMS / source of</text>
+    <text x="150" y="148" text-anchor="middle" font-weight="600">truth</text>
+    <text x="150" y="170" text-anchor="middle" font-size="12" fill="#8b93a1">policy doc edited</text>
+
+    <!-- box 2 -->
+    <rect x="290" y="90" width="220" height="92" rx="10" fill="#fbeee6" stroke="#e0743c" stroke-width="1.6"/>
+    <text x="400" y="128" text-anchor="middle" font-weight="600">Nightly cron</text>
+    <text x="400" y="148" text-anchor="middle" font-weight="600">(00:00 UTC)</text>
+    <text x="400" y="170" text-anchor="middle" font-size="12" fill="#8b93a1">unaware of what changed</text>
+
+    <!-- box 3 -->
+    <rect x="540" y="90" width="220" height="92" rx="10" fill="#fbeee6" stroke="#e0743c" stroke-width="1.6"/>
+    <text x="650" y="128" text-anchor="middle" font-weight="600">Re-embed</text>
+    <text x="650" y="148" text-anchor="middle" font-weight="600">every document</text>
+    <text x="650" y="170" text-anchor="middle" font-size="12" fill="#8b93a1">whether changed or not</text>
+
+    <!-- box 4 -->
+    <rect x="790" y="90" width="220" height="92" rx="10" fill="#fbeee6" stroke="#e0743c" stroke-width="1.6"/>
+    <text x="900" y="128" text-anchor="middle" font-weight="600">Swap in new</text>
+    <text x="900" y="148" text-anchor="middle" font-weight="600">vector index</text>
+    <text x="900" y="170" text-anchor="middle" font-size="12" fill="#8b93a1">no version / as-of stamp</text>
+
+    <!-- box 5 -->
+    <rect x="1040" y="90" width="240" height="92" rx="10" fill="#fbeee6" stroke="#e0743c" stroke-width="1.6"/>
+    <text x="1160" y="128" text-anchor="middle" font-weight="600">Retrieval</text>
+    <text x="1160" y="148" text-anchor="middle" font-weight="600">+ generation</text>
+    <text x="1160" y="170" text-anchor="middle" font-size="12" fill="#8b93a1">answers with full confidence</text>
+  </g>
+
+  <!-- arrows before -->
+  <path d="M260,136 L290,136" stroke="#e0743c" stroke-width="2.2" marker-end="url(#arrow-before)" fill="none"/>
+  <path d="M510,136 L540,136" stroke="#e0743c" stroke-width="2.2" marker-end="url(#arrow-before)" fill="none"/>
+  <path d="M760,136 L790,136" stroke="#e0743c" stroke-width="2.2" marker-end="url(#arrow-before)" fill="none"/>
+  <path d="M1010,136 L1040,136" stroke="#e0743c" stroke-width="2.2" marker-end="url(#arrow-before)" fill="none"/>
+
+  <!-- blind window bracket -->
+  <path d="M290,204 L290,214 L1280,214 L1280,204" stroke="#e0743c" stroke-width="1.6" fill="none" stroke-dasharray="4 3"/>
+  <text x="785" y="234" text-anchor="middle" font-size="13.5" fill="#e0743c" font-weight="600">up to ~24h (p50: 21.4h) where the bot serves the old answer and can't tell it's old</text>
+
+  <!-- divider -->
+  <line x1="40" y1="280" x2="1280" y2="280" stroke="#e7e9ec" stroke-width="1.5"/>
+
+  <!-- ===================== AFTER ROW ===================== -->
+  <text x="40" y="330" font-size="20" font-weight="700" fill="#1f2430">After — event-driven, content-hashed, freshness-aware</text>
+  <text x="40" y="352" font-size="13.5" fill="#8b93a1">the source system tells the index what changed; the index tells retrieval how old what it has is</text>
+
+  <g font-size="14.5" fill="#1f2430">
+    <!-- box 1 -->
+    <rect x="40"  y="378" width="220" height="98" rx="10" fill="#e7f3ef" stroke="#1f8a70" stroke-width="1.6"/>
+    <text x="150" y="414" text-anchor="middle" font-weight="600">CMS / source of</text>
+    <text x="150" y="434" text-anchor="middle" font-weight="600">truth</text>
+    <text x="150" y="458" text-anchor="middle" font-size="12" fill="#5f6b76">publish emits a webhook</text>
+
+    <!-- box 2 -->
+    <rect x="290" y="378" width="220" height="98" rx="10" fill="#e7f3ef" stroke="#1f8a70" stroke-width="1.6"/>
+    <text x="400" y="410" text-anchor="middle" font-weight="600">Change event</text>
+    <text x="400" y="430" text-anchor="middle" font-size="12.5" font-family="Menlo, monospace" fill="#1f2430">{doc_id, rev,</text>
+    <text x="400" y="448" text-anchor="middle" font-size="12.5" font-family="Menlo, monospace" fill="#1f2430">content_hash}</text>
+
+    <!-- box 3 -->
+    <rect x="540" y="378" width="220" height="98" rx="10" fill="#e7f3ef" stroke="#1f8a70" stroke-width="1.6"/>
+    <text x="650" y="410" text-anchor="middle" font-weight="600">Hash-diff chunks</text>
+    <text x="650" y="430" text-anchor="middle" font-size="12" fill="#5f6b76">re-embed only what</text>
+    <text x="650" y="448" text-anchor="middle" font-size="12" fill="#5f6b76">actually changed</text>
+    <text x="650" y="466" text-anchor="middle" font-size="12" fill="#5f6b76">tombstone what's gone</text>
+
+    <!-- box 4 -->
+    <rect x="790" y="378" width="220" height="98" rx="10" fill="#e7f3ef" stroke="#1f8a70" stroke-width="1.6"/>
+    <text x="900" y="410" text-anchor="middle" font-weight="600">Upsert vector +</text>
+    <text x="900" y="430" text-anchor="middle" font-size="12.5" font-family="Menlo, monospace" fill="#1f2430">source_updated_at</text>
+    <text x="900" y="448" text-anchor="middle" font-size="12.5" font-family="Menlo, monospace" fill="#1f2430">indexed_at, generation</text>
+
+    <!-- box 5 -->
+    <rect x="1040" y="378" width="240" height="98" rx="10" fill="#e7f3ef" stroke="#1f8a70" stroke-width="1.6"/>
+    <text x="1160" y="410" text-anchor="middle" font-weight="600">Retrieval</text>
+    <text x="1160" y="430" text-anchor="middle" font-size="12" fill="#5f6b76">penalizes / filters stale</text>
+    <text x="1160" y="448" text-anchor="middle" font-size="12" fill="#5f6b76">chunks by lag budget,</text>
+    <text x="1160" y="466" text-anchor="middle" font-size="12" fill="#5f6b76">flags "may be outdated"</text>
+  </g>
+
+  <path d="M260,427 L290,427" stroke="#1f8a70" stroke-width="2.2" marker-end="url(#arrow-after)" fill="none"/>
+  <path d="M510,427 L540,427" stroke="#1f8a70" stroke-width="2.2" marker-end="url(#arrow-after)" fill="none"/>
+  <path d="M760,427 L790,427" stroke="#1f8a70" stroke-width="2.2" marker-end="url(#arrow-after)" fill="none"/>
+  <path d="M1010,427 L1040,427" stroke="#1f8a70" stroke-width="2.2" marker-end="url(#arrow-after)" fill="none"/>
+
+  <path d="M290,496 L290,506 L1280,506 L1280,496" stroke="#1f8a70" stroke-width="1.6" fill="none" stroke-dasharray="4 3"/>
+  <text x="785" y="526" text-anchor="middle" font-size="13.5" fill="#1f8a70" font-weight="600">p50 lag: ~11 minutes — and if lag ever exceeds the budget, retrieval says so instead of guessing</text>
+
+  <!-- footer note -->
+  <text x="40" y="565" font-size="12.5" fill="#8b93a1">The index is a derived cache of the CMS, not a second source of truth — every box on the bottom row exists to keep that true.</text>
+</svg>
