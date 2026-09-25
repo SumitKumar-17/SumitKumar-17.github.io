@@ -2,8 +2,7 @@
 title: "Stale Grounding: The Cache-Invalidation Problem in RAG"
 date: 2026-09-26
 topic: AI
-lead:
-  Your vector index is a cache, and nobody invalidated it.
+lead: Your vector index is a cache, and nobody invalidated it.
 ---
 
 ![Rows of server racks lit in blue, representing a data center hosting a vector index](https://images.unsplash.com/photo-1695668548342-c0c1ad479aee?w=1600&q=80&auto=format&fit=crop)
