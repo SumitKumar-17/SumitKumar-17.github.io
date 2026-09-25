@@ -1,5 +1,5 @@
 ---
-title: Stale Grounding: The Cache-Invalidation Problem in RAG
+title: "Stale Grounding: The Cache-Invalidation Problem in RAG"
 date: 2026-09-26
 topic: AI
 lead:
