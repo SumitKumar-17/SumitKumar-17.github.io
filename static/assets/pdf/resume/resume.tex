@@ -61,6 +61,20 @@
 \vspace{-3mm}
 
 \begin{center}
+\textbf{Software Engineer Intern, GitHub Actions} - Ubicloud
+\hfill\hfill\textit{Aug'26-Sep'26}
+\end{center}
+\vspace{-2mm}
+\begin{itemize}[leftmargin=1.5mm, itemsep=0pt, topsep=0pt]
+  \item Split \textbf{GitHub Runner vCPU quotas} by provider, capped \textbf{AWS spillover} per customer, and added monthly spending limits
+  \item Modeled \textbf{runner-pool demand} with an \textbf{EWMA} estimator (\textbf{Little's Law}), raising simulated hit ratio from \textbf{36\% to 94\%}
+  \item Fixed \textbf{GitHub webhook redelivery} misses under high volume using a persisted, time-bounded cursor replacing page scans
+  \item Added \textbf{host exclusions}, \textbf{AWS AMI} cross-account sharing, a runner-listing \textbf{CLI}, and \textbf{Ubuntu 26.04} CI test support
+\end{itemize}
+
+\vspace{1mm}
+
+\begin{center}
 \textbf{Software Engineer Intern} - Atlassian
 \hfill\hfill\textit{May'26-Jul'26}
 \end{center}
@@ -76,7 +90,7 @@
 
 \begin{center}
 \textbf{Backend Engineer Intern} - Steps AI
-\hfill\hfill\textit{Jun'25-Present}
+\hfill\hfill\textit{Jun'25-May'26}
 \end{center}
 \vspace{-2mm}
 \begin{itemize}[leftmargin=1.5mm, itemsep=0pt, topsep=0pt]
@@ -105,29 +119,15 @@
 {\large \textbf{\begin{tcolorbox}\textsc{Projects}\end{tcolorbox}}}
 \vspace{-3mm}
 \begin{center}
-
-\textbf{Scalable Analytics Pipeline}
+\textbf{KeystoneDB}
 \hfill\hfill\textit{Mar'25 - Apr'25}
 \end{center}
 \vspace{-2mm}
 \begin{itemize}[leftmargin=1.5mm, itemsep=0pt, topsep=0pt]
-    \item Engineered \textbf{distributed} data processing pipeline using \textbf{Apache Spark} for multi-terabyte datasets with ETL and features
-    \item Trained and optimized \textbf{ML models} (forecasting, clustering) with large-scale hyperparameter tuning and cross-validation
-    \item Designed a \textbf{real-time streaming module} (Kafka + Spark Streaming) enabling low-latency analytics and predictive monitoring
-    \item Deployed models as \textbf{REST APIs} and built an interactive dashboard with visualization and ad-hoc querying support
-\end{itemize}
-
-\vspace{1mm}
-\begin{center}
-    \textbf{Conversational AI Platform for Employee Welfare}
-    \hfill\hfill\textit{Feb'25 - Mar'25}
-    \end{center}
-    \vspace{-2mm}
-\begin{itemize}[leftmargin=1.5mm, itemsep=0pt, topsep=0pt]
-\item Built \textbf{AI-driven system} to monitor \textbf{employee well-being} by \textbf{behavioral signals}, \textbf{automated insights}, \textbf{LLM pipelines}
-\item Processed data from \textbf{1K+ users} using a \textbf{multi-stage pipeline} with \textbf{FastAPI}, \textbf{CRON jobs}, and \textbf{performance metrics}
-\item Flagged \textbf{high-risk users} with \textbf{42\% improved accuracy} using \textbf{EMA-weighted scores} and \textbf{ensemble models}
-\item Orchestrated \textbf{LLM-powered chatbot} and \textbf{summaries} via \textbf{LangChain pipelines}, enabling \textbf{context-aware insights}
+    \item Built a \textbf{lightweight RDBMS} in \textbf{C++} with an \textbf{SQL parser} using \textbf{Flex and Bison} and \textbf{persistent storage} by \textbf{RocksDB}
+\item Implemented \textbf{modular query execution} supporting \textbf{15+ SQL operations} over \textbf{LSM-tree} with \textbf{transaction handling}
+\item Developed a \textbf{custom key-value storage layer} using \textbf{RocksDB}, ensuring \textbf{durability} and \textbf{correctness} for SQL operations
+\item Added \textbf{70+ unit tests} with \textbf{Google Test} to verify \textbf{parsing accuracy}, \textbf{transaction consistency}, \textbf{safe concurrent execution}
 \end{itemize}
 
 \vspace{-3mm}

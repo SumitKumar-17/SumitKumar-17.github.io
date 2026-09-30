@@ -81,6 +81,43 @@
   <h2 class="heading2">Experience</h2>
 
   <Workplace
+    title="Software Engineer Intern, GitHub Actions"
+    company="Ubicloud"
+    url="https://www.ubicloud.com/"
+    dates="August 2026 – September 2026"
+    location=""
+  >
+    <li>
+      Split <b>GitHub Runner vCPU quotas</b> by provider, capped
+      <b>AWS spillover</b> per customer, and added monthly spending limits.
+    </li>
+    <li>
+      Modeled runner-pool demand with an <b>EWMA</b> estimator (Little's
+      Law), raising simulated hit ratio from <b>36% to 94%</b> on production
+      traffic.
+    </li>
+    <li>
+      Fixed <b>GitHub webhook redelivery</b> misses under high volume using a
+      persisted, time-bounded cursor replacing page scans.
+    </li>
+    <li>
+      Added host exclusions, <b>AWS AMI</b> cross-account sharing, a
+      runner-listing <b>CLI</b>, and diagnosed a cross-repo Ruby toolchain
+      break to unblock <b>Ubuntu 26.04</b> CI.
+    </li>
+  </Workplace>
+
+  <p class="mt-1 mb-8 text-sm text-neutral-500">
+    Public work at
+    <a
+      class="link"
+      href="https://github.com/ubicloud/ubicloud"
+      target="_blank"
+      rel="noreferrer">github.com/ubicloud/ubicloud</a
+    >
+  </p>
+
+  <Workplace
     title="Software Engineer Intern"
     company="Atlassian"
     url="https://www.atlassian.com/"
@@ -115,7 +152,7 @@
     title="Backend Engineer Intern"
     company="Steps AI"
     url="https://stepsai.co/"
-    dates="June 2025 – Present"
+    dates="June 2025 – May 2026"
     location=""
   >
     <li>
