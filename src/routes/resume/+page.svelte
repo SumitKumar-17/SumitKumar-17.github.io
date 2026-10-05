@@ -125,26 +125,30 @@
     location="Bengaluru, India"
   >
     <li>
-      Shipped <b>Bulk Archive</b> and <b>Bulk Delete Teams</b> across all Atlassian
-      orgs via
+      Built the
       <a
         class="link"
         href="https://developer.atlassian.com/platform/teams/graphql/#mutations_bulkDeleteTeams"
         target="_blank"
-        rel="noreferrer">GraphQL mutation APIs</a
-      > and custom frontend dialogs.      
+        rel="noreferrer"><b>bulkDeleteTeams</b> GraphQL mutation</a
+      >
+      and the <b>React</b>/TypeScript UI for bulk archive, bulk delete, and
+      single archive.
     </li>
     <li>
-      Replaced a 3-4s manual deletion flow with a single API call using
-      hierarchical async deletion built on <b>AWS SQS</b> and <b>DynamoDB</b>.
+      Moved hierarchical team deletion to async on <b>AWS SQS</b> and
+      <b>DynamoDB</b> with retries and a dead-letter queue, replacing a 3-4s
+      manual call and gating the rollout behind a feature flag.
     </li>
     <li>
-      Proposed a fix for notification spam in the Bulk Archive/Delete flows and
-      validated it via <b>Splunk</b> logs across staging and production.
+      Drove an RFC on notification spam in the bulk flows and shipped a
+      <b>sendBulkNotification</b> flag, validating the fix via <b>Splunk</b>
+      logs in staging and production.
     </li>
     <li>
       Instrumented API latency, failure, and counter metrics with
-      <b>SignalFx</b> dashboards and <b>Terraform</b>-managed alert rules.
+      <b>SignalFx</b> dashboards and <b>Terraform</b>-managed alert rules,
+      including an alert on the dead-letter queue.
     </li>
   </Workplace>
 

@@ -80,10 +80,10 @@
 \end{center}
 \vspace{-2mm}
 \begin{itemize}[leftmargin=1.5mm, itemsep=0pt, topsep=0pt]
-  \item Shipped \textbf{Bulk Archive} and \textbf{Bulk Delete Teams} across all Atlassian orgs via \textbf{GraphQL mutations} and frontend dialogs
-  \item Replaced a \textbf{3-4s manual deletion flow} with one API call using hierarchical async deletion on \textbf{AWS SQS} and \textbf{DynamoDB}
-  \item Proposed a fix for \textbf{notification spam} in Bulk Archive/Delete and validated it via \textbf{Splunk} in staging and production
-  \item Instrumented API latency, failure, and counter metrics with \textbf{SignalFx} dashboards and \textbf{Terraform}-managed alert rules
+  \item Built \textbf{bulkDeleteTeams} \textbf{GraphQL mutation} and a \textbf{React}/\textbf{TypeScript} UI for bulk archive, bulk delete, and single archive
+  \item Moved hierarchical team deletion to async on \textbf{AWS SQS}/\textbf{DynamoDB} with retries/\textbf{DLQ}, replacing \textbf{3-4s} manual call, \textbf{flag}-gated
+  \item Drove \textbf{RFC} on bulk notification spam and shipped \textbf{sendBulkNotification} flag, validated via \textbf{Splunk} logs, staging/production
+  \item Instrumented API latency, failure, counter metrics, \textbf{SignalFx} dashboards, \textbf{Terraform}-managed alert rules, including \textbf{DLQ}
 \end{itemize}
 
 \vspace{1mm}
