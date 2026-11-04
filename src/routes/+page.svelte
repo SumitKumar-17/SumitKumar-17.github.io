@@ -15,14 +15,14 @@
       desc: "hardware-isolated Firecracker microVMs for running untrusted code",
     },
     {
+      name: "TimeFS",
+      href: "/projects/timefs",
+      desc: "userspace filesystem with time travel - content-addressed history you can branch and merge",
+    },
+    {
       name: "Cache-Pot",
       href: "/projects/cache-pot",
       desc: "Redis-compatible memory engine for AI agents, one server instead of four",
-    },
-    {
-      name: "Trading Engine",
-      href: "/projects/trading-engine",
-      desc: "real-time trading exchange simulation with a Go matching engine",
     },
     {
       name: "Mini RISC Processor",
