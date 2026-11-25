@@ -1,6 +1,6 @@
 ---
 title: TimeFS
-date: 2026-10-26
+date: 2026-11-25
 repo: SumitKumar-17/timefs
 topics: ["Rust", "FUSE", "Filesystems", "Content-Addressed Storage"]
 lead:
@@ -58,13 +58,16 @@ to zero overhead on top of what FUSE already costs.
 
 ## Status
 
-Milestones M0 through M7 are done: the core engine, pack and loose object
-stores, a writable FUSE mount, checkpoints with crash recovery, branches, merge,
-GC, and a benchmark/crash-injection/differential-stress-test suite - see the
+**Released as 0.1.0** - milestones M0 through M7 are done: the core engine, pack
+and loose object stores, a writable FUSE mount, checkpoints with crash recovery,
+branches, merge, GC, and a benchmark/crash-injection/differential-stress-test
+suite. Prebuilt Linux x86_64 binaries are attached to each
+[GitHub release](https://github.com/SumitKumar-17/timefs/releases); anything
+newer than libfuse 3.18 (Arch, for instance) builds from source instead. See the
 [roadmap](https://github.com/SumitKumar-17/timefs/blob/main/docs/roadmap.md) for
-what's shipped versus still open (hard links, extended attributes, compression,
-and multi-node are explicitly not there yet). It's deliberately **not** trying
-to be a Git replacement, a distributed filesystem, or a security boundary - it's
-a single-node, single-writer research question about how cheaply a
-general-purpose filesystem can support snapshots and branching, answered with
-actual measurements instead of a pitch deck.
+what's still open (hard links, extended attributes, compression, and multi-node
+are explicitly not there yet). It's deliberately **not** trying to be a Git
+replacement, a distributed filesystem, or a security boundary - it's a
+single-node, single-writer research question about how cheaply a general-purpose
+filesystem can support snapshots and branching, answered with actual
+measurements instead of a pitch deck.
